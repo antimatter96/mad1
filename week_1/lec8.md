@@ -1,45 +1,86 @@
-# L1.2: Components of an App
+# L1.8: What is a Protocol?
+
 ---
 
-### Storage
+### Protocol
 
-- Some data that is stored somewhere and is manipulated
+Both sides agree on how to talk
 
-### Computation
+Server expects requests
 
-- How are we manipla;toing the data
-### Presentation
-- how we show the data to the suer
+- Nature of request
+- Nature of client
+- Types of result the client can deal with
 
+Client expects response
 
-----
+- Ask server for something
+- Convey what you can accept
+- Read result and process
 
+### HTTP
 
-Email CLient
+Text Based
 
-**Storage**
-- Where are emails stored -> Server
-- How they are stored -> ? File formats/How to make searchable
+Requests specified as GET, POST, PUT etc
 
-**Computation**
-- Indexing [for filtering etc]
-- Searching
+- Headers can be used to convey acceptable respoe tpyes, languages, encoding etc
+- Which host to connect to [if multiple hosts on single server]
 
-**Presentation**
-- Dislpay list of mails
-- Display individual mails
-- Unread/read etc
+Response Headers
 
-----
+- Convey message type, data
+- Cache info
+- Status codes
 
+### Use Cases
 
-- ✅ Storage is a component of an application where we can store our application data permanently.
-- ✅ Storage is a component of an application where the data can be stored temporarily.
+GET : simple requests, search queries
 
+POST : more complex form data, large text blocks, file uploads
 
-Which among the following is/are true about an embedded application?
+PUT/DELETE :
 
-- ✅ Calculator is an embedded application
-- ❌ An embedded application is always network oriented.
-- ✅ An embedded application is only used to perform a specific task.
-- ❌ An embedded application cannot be installed in a device.
+- Rarely used in web1
+- Mostly in web2.0
+- Basis of most APIs -> REST, CRUD
+
+---
+
+###
+
+```bash
+python3 -m http.server
+```
+
+// take module http, run function server
+// using http/1.0
+
+// Gives content-type -> how to interpret this response
+// Content length
+// Last modiefid -> if not chnaged : no need to redraw page
+
+- Serve files from local folder
+- Understands basic http requests
+- Gives more detailed headers and response
+
+GET '/'
+-> serve index.html if present
+// convention
+
+GET '/filename'
+-> returns the file
+-> picks apt content-type
+
+---
+
+**Which of the following statements is/are correct?**
+
+- ✅ GET method is generally used to request a resource from the server.
+- ✅ In GET method, data is visible in url.
+- ❌ In POST method, data is visible in url.
+- ✅ POST method is generally used to submit forms.
+
+**Which among the following methods is used by the HTTP protocol to transfer data between a browser and a server?**
+
+- ✅ Both GET and POST

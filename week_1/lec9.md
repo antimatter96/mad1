@@ -1,45 +1,77 @@
-# L1.2: Components of an App
+# L1.9: Performance of a Website
+
 ---
 
-### Storage
+Latency
+- How much time does it take to get the response for a given response
 
-- Some data that is stored somewhere and is manipulated
+~ Speed of light in wire : 2e8
 
-### Computation
+5ms for 1000km
 
-- How are we manipla;toing the data
-### Presentation
-- how we show the data to the suer
+if serever 2000km away
+- one way request : 10ms
+- round trip : 20ms [assuming instantaious response]
 
+Max 50 request / second per client if done serially [wait for response from previous]
 
-----
+---
 
+Resonse Size
 
-Email CLient
+Headers + Actual Data
 
-**Storage**
-- Where are emails stored -> Server
-- How they are stored -> ? File formats/How to make searchable
+- Assume 1 KB
 
-**Computation**
-- Indexing [for filtering etc]
-- Searching
+- Network 100 Mbps [of server]
+- 10 MBytes /s
 
-**Presentation**
-- Dislpay list of mails
-- Display individual mails
-- Unread/read etc
+=> 10,000 requests / second []
 
-----
+---
 
+Google.com
 
-- ✅ Storage is a component of an application where we can store our application data permanently.
-- ✅ Storage is a component of an application where the data can be stored temporarily.
+Ideal ~ 144k
 
+Handles 60,000 requests / second
 
-Which among the following is/are true about an embedded application?
+-> 80 Gbps
 
-- ✅ Calculator is an embedded application
-- ❌ An embedded application is always network oriented.
-- ✅ An embedded application is only used to perform a specific task.
-- ❌ An embedded application cannot be installed in a device.
+-> Need to scale out
+-> Multipe data centers
+
+---
+
+YouTube
+
+- one python process - 6MB
+- multiple parallel request -> mulktiple processes
+- say streaming -> 2 Million viewers
+- 12 TB RAM
+
+-> Need to scale out
+-> Multipe servers / data centers
+
+---
+
+Google
+
+- Index 100s of billions of pages
+- Cross refernce pagerank
+- Total index size estimate : 100,000,000 => 100 petabytes
+
+- Storage 
+- Retrieval
+
+---
+
+What does RTT stand for in the context of network requests and data transfer?
+
+- Round Trip Time
+
+What should be the minimum bandwidth of a data center that can handle 6,250 requests per second of 200 kilobytes each?
+
+-> 6250 * 200 KBps
+-> * 8 kbps
+-> /(1000 * 1000) Gbps
