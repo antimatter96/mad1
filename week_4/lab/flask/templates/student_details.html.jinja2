@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<header>
+  <title>Student Data</title>
+</header>
+<body>
+  <style>
+    table {
+      border-collapse: collapse;
+      border: 2px solid rgb(200,200,200);
+    }
+    td, th {
+      border: 1px solid rgb(190,190,190);
+      padding: 5px 10px;
+    }
+  </style>
+  <div id="header">
+    <h1>Student Details</h1>
+  </div>
+  <div id="main">
+    <table border = "2" id="student-details-table">
+        <tr>
+          <th>Student Id</th>
+          <th>Course Id</th>
+          <th>Marks</th>
+        </tr>
+        {% for course_marks in data %}
+        <tr>
+          <td>{{ course_marks["student_id"] }}</td>
+          <td>{{ course_marks["course_id"] }}</td>
+          <td>{{ course_marks["marks"] }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td colspan="2" style="text-align:center">Total Marks</td>
+          <td>{{ total_marks }}</td>
+        </tr>
+    </table>
+    <p>
+      <a href={{ url_for('index') }} >Go Back</a>
+    <p/>
+  </div>
+  <div id="footer">
+
+  </div>
+</body>
+</html>
