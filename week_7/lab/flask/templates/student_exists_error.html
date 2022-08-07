@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %} Error {% endblock %}
+
+
+{% block main %}
+<div>
+
+
+  <div>
+    <p>Student already exists. Please use a different Roll Number !!</p>
+  </div>
+
+  <div>
+    <a href="{{ url_for('list_students') }}">Go Home</a>
+  </div>
+
+</div>
+{% endblock %}

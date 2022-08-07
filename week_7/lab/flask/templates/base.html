@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='sakura.css') }}">
+</head>
+
+<body>
+  <style>
+    body {
+      padding-top: 2em;
+    }
+    * {
+      font-family:'Courier New', Courier, monospace !important;
+    }
+    /* table {
+      border-collapse: collapse;
+      border: 2px solid rgb(200, 200, 200);
+    }
+
+    td,
+    th {
+      border: 1px solid rgb(190, 190, 190);
+      padding: 5px 10px;
+    } */
+  </style>
+  {% block main %}{% endblock %}
+</body>
+
+</html>

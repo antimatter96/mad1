@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %} Some Title {% endblock %}
+
+
+{% block main %}
+<div>
+
+
+  <div>
+    <h1>Courses list</h1>
+    <h1><a href="{{ url_for('list_students') }}">Go to Students</a></h1>
+    {% if courses|length > 0 %}
+    <table id="all-courses">
+      <tr>
+        <th>SNo</th>
+        <th>Course Code</th>
+        <th>Course Name</th>
+        <th>Course Description</th>
+        <th>Actions</th>
+      </tr>
+
+      {% for course in courses %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td><a href="{{ url_for('show_course_details', course_id=course.course_id) }}">{{ course.course_code }}</a></td>
+        <td>{{ course.course_name }}</td>
+        <td>{{ course.course_description }}</td>
+        <td>
+          <a href="{{ url_for('show_update_course', course_id=course.course_id) }}" type="button">Update</a>
+          <a href="{{ url_for('delete_course', course_id=course.course_id) }}" type="button">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    No courses found. Add the courses now!
+    {% endif %}
+  </div>
+
+  <div>
+    <a href="{{ url_for('show_create_course') }}">+ Add Course</a>
+  </div>
+</div>
+{% endblock %}
