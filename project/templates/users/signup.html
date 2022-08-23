@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Signup{% endblock %}
+
+{% block header %}
+Sign Up
+{% endblock %}
+
+{% block main %}
+<div class="offset-md-4 col-md-4 py-2">
+  <form action="" method="POST" id="create-user-form">
+    <div class="form-floating mb-2">
+      <input type="text" name="name" class="form-control" id="name" placeholder="Arpit Jain" required>
+      <label for="name">Name</label>
+    </div>
+    <div class="form-floating mb-2">
+      <input type="email" name="email" class="form-control" id="email" placeholder="me@arpit.space" required>
+      <label for="email">Email</label>
+    </div>
+    <div class="form-floating mb-2">
+      <input type="password" name="password" class="form-control" id="password" placeholder="Password" required
+        minlength="8">
+      <label for="password">Password</label>
+    </div>
+    <div>
+      <input type="submit" value="Signup" class="btn btn-primary btn-lg w-100">
+    </div>
+  </form>
+</div>
+
+{% endblock main %}

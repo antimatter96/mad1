@@ -1,0 +1,3 @@
+class FieldsNotValidError(Exception):
+  """Error raised when a field does not feel right"""
+  ...

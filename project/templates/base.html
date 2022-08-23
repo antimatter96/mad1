@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
+  <script src="{{ url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
+</head>
+
+<body>
+  {% include 'navigation.html' %}
+  {% if errors|length > 0 %}
+    {% include 'alert.html' %}
+  {% endif %}
+  <div id="main" class="container border">
+    <header class="my-2 border-bottom">
+      <h2 class="text-center">{% block header %}{% endblock %}</h2>
+    </header>
+    <div class="row align-items-center my-4">
+      {% block main %}{% endblock %}
+    </div>
+  </div>
+</body>
+
+</html>

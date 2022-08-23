@@ -1,0 +1,6 @@
+<div id="main-alert" class="alert alert-danger alert-dismissible fade show" role="alert">
+  <button type="button" class="btn-close" data-bs-dismiss="alert" data-dismiss="alert" aria-label="Close"></button>
+  {% for error in errors %}
+  {{ error }} {% if not loop.last %}<br>{% endif %}
+  {% endfor %}
+</div>
