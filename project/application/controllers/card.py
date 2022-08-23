@@ -45,3 +45,7 @@ def move_card():
 @app.route("/list_orphans", methods=['GET'])
 def list_orphans():
   ...
+
+@app.route("/stats", methods=['GET'])
+def stats():
+  return "Stats"

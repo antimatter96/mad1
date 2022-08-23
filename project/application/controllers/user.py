@@ -1,5 +1,5 @@
 from flask import current_app as app
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, session
 from email_validator import validate_email, EmailNotValidError
 import bcrypt
 
@@ -93,14 +93,15 @@ def login():
       try:
         if bcrypt.checkpw(password.encode('utf8'), user.password):
           print("USER LOGGED IN")
+          app.logger.info('logging in')
+          session['username'] = username
+          session['user_id'] = user.user_id
         else:
           errors.append(FieldsNotValidError("Email/Password not valid"))
       except Exception as e:
         app.log_exception(e)
         app.logger.error(e)
         errors.append(e)
-      else:
-        app.logger.info('logging in')
     else:
       errors.append(FieldsNotValidError("Email/Password not valid"))
 
@@ -114,4 +115,6 @@ def login():
 
 @app.route("/logout", methods=['GET', 'POST'])
 def logout():
-  return ...
+  session.pop('username', None)
+  session.pop('user_id', None)
+  return redirect(url_for('login'))

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Board{% endblock %}
+
+{% block header %}
+Board
+{% endblock %}
+
+{% block main %}
+{% if lists|length < 4 %}
+{% set col_width, col_offset = "col-md-3", "offset-md-3" %}
+{% endif %}
+{% if lists|length == 0 %}
+{% set col_offset = "offset-md-5" %}
+{% endif %}
+{% for list in lists %}
+  <div class="{{col_width}} py-2 align-self-baseline flex-column">{% include 'board/list.html' %}</div>
+{% endfor %}
+<div class="{{col_width}} py-2 text-center d-flex {{col_offset}}" id="new_list">
+  <div class="align-self-center">
+    {% if lists|length == 0 %}
+      <h4 class="fw-bold">You have no lists</h4>
+    {% endif %}
+    <h4>Add a list</h4>
+    <button type="submit" class="btn btn-primary btn-lg fs-1 fw-bolder px-4 rounded-circle">+</button>
+  </div>
+</div>
+{% endblock main %}

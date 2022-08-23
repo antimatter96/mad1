@@ -11,3 +11,4 @@ def not_authorized(e):
 from application.controllers.user import *
 from application.controllers.card import *
 from application.controllers.utils import *
+from application.controllers.list import *
