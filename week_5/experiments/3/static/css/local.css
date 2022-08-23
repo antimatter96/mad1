@@ -1,0 +1,3 @@
+some stuff
+
+use -> {{ url_for('static', filename='css/local.css') }}

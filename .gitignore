@@ -1,0 +1,8 @@
+screen_casts
+*/__pycache__/*
+__pycache__
+
+db_directory/*.sqlite3
+
+*.log
+*.pyc
