@@ -22,7 +22,7 @@ Board
       <h4 class="fw-bold">You have no lists</h4>
     {% endif %}
     <h4>Add a list</h4>
-    <button type="submit" class="btn btn-primary btn-lg fs-1 fw-bolder px-4 rounded-circle">+</button>
+    <a class="btn btn-primary btn-lg fs-1 fw-bolder px-4 rounded-circle" href="{{ url_for('render_create_list') }}">+</a>
   </div>
 </div>
 {% endblock main %}

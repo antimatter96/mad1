@@ -21,7 +21,7 @@ def log_session(f):
 
   return wrapper
 
-def add_user(f):
+def ensure_logged_in(f):
 
   @wraps(f)
   def wrapper(*args, **kwds):
@@ -32,6 +32,7 @@ def add_user(f):
     if current_user is None:
       return redirect(url_for('render_signin'))
 
-    return f(current_user, *args, **kwds)
+    print('current_user ->', current_user.user_id)
+    return f(*args, **kwds)
 
   return wrapper

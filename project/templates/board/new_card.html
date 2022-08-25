@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Create a Card{% endblock %}
+
+{% block header %}
+Create Card
+{% endblock %}
+
+{% block main %}
+<div class="col-md-4 py-4"></div>
+<div class="col-md-4 py-2">
+  <form action="" method="POST" id="create-card-form">
+    <div class="form-floating mb-2">
+      <input type="title" name="title" class="form-control" id="title" placeholder="Some title" required>
+      <label for="title" class="fw-bold">Title</label>
+    </div>
+    <div class="form-floating mb-2">
+      <textarea name="summary" class="form-control" id="summary" placeholder="summary" required
+        style="height: 10rem;"></textarea>
+      <label for="title" class="fw-bold">Summary</label>
+    </div>
+    <div class="form-floating mb-2">
+      <select class="form-select" id="list" name="list" required>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+      </select>
+      <label for="list" class="fw-bold">List</label>
+    </div>
+    <div>
+      <input type="submit" value="Create Card" class="btn btn-primary btn-lg w-100">
+    </div>
+  </form>
+</div>
+<div class="col-md-4 py-2"></div>
+{% endblock main %}

@@ -15,6 +15,7 @@ def cards():
 def render_create_card():
   lists = db.session.query(List).with_entities(List.list_id, List.name).all()
 
+  return render_template('board/new_card.html', errors=[])
   return lists
 
 @app.route("/card", methods=['POST'])
@@ -28,15 +29,15 @@ def create_card():
 
 @app.route("/card/<card_id>", methods=['DELETE'])
 def delete_card(card_id):
-  return _list_students()
+  return '_list_students'
 
 @app.route("/card/<card_id>", methods=['PUT'])
 def edit_card(card_id):
-  return _list_students()
+  return '_list_students()'
 
 @app.route("/card/<card_id>", methods=['GET'])
 def list_card(card_id):
-  return _list_students()
+  return '_list_students'
 
 @app.route("/move_card", methods=['POST'])
 def move_card():
