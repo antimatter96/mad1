@@ -4,5 +4,15 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"python.formatting.provider": "yapf",
+		"files.eol": "\n",
+		"files.insertFinalNewline": true,
+		"editor.fontSize": 14,
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-python.python"
+		]
+	}
 }

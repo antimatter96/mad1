@@ -20,17 +20,18 @@
       <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
         aria-expanded="false"><span class="fw-bold">Actions</span></a>
       <div class="dropdown-menu w-100 py-1">
-        <a class="dropdown-item" href="#">Action</a>
-        <a class="dropdown-item" href="#">Another action</a>
+        <a class="dropdown-item" href="#">Edit</a>
+        <a class="dropdown-item" href="#">Move List</a>
         <a class="dropdown-item" href="#">Something else here</a>
         <div class="dropdown-divider mt-0"></div>
-        <a class="dropdown-item bg-danger fw-bold text-white hover-danger" href="#">Separated link</a>
+        <a class="dropdown-item bg-danger fw-bold text-white hover-danger" href="#">Delete</a>
       </div>
     </div>
   </div>
 </div>
 <div class="card text-white shadow-none border-0 mt-4">
   <div class="align-self-center">
-    <button type="submit" class="btn btn-primary btn-lg fs-2 fw-bolder px-4 rounded-circle">+</button>
+    <a class="btn btn-primary btn-lg fs-2 fw-bolder px-4 rounded-circle"
+      href="{{ url_for('render_create_card', list_id=[list['list_id']]) }}">+</a>
   </div>
 </div>

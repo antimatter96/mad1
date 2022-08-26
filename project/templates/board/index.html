@@ -7,16 +7,26 @@ Board
 {% endblock %}
 
 {% block main %}
+{% set col_width, col_offset = "col-md-2", "offset-md-3" %}
+{% if lists|length == 5 %}
+{% set col_width, col_offset = "col-md-2", "offset-md-0" %}
+{% endif %}
+{% if lists|length == 4 %}
+{% set col_width, col_offset = "col-md-2", "offset-md-0" %}
+{% endif %}
 {% if lists|length < 4 %}
 {% set col_width, col_offset = "col-md-3", "offset-md-3" %}
 {% endif %}
+
 {% if lists|length == 0 %}
 {% set col_offset = "offset-md-5" %}
 {% endif %}
 {% for list in lists %}
-  <div class="{{col_width}} py-2 align-self-baseline flex-column">{% include 'board/list.html' %}</div>
+  <div class="{{col_width}} py-2 px-0 align-self-baseline flex-column">{% include 'board/list.html' %}</div>
 {% endfor %}
-<div class="{{col_width}} py-2 text-center d-flex {{col_offset}}" id="new_list">
+
+{% if lists|length < 5 %}
+<div class="{{col_width}} py-2 px-0 text-center d-flex {{col_offset}}" id="new_list">
   <div class="align-self-center">
     {% if lists|length == 0 %}
       <h4 class="fw-bold">You have no lists</h4>
@@ -25,4 +35,5 @@ Board
     <a class="btn btn-primary btn-lg fs-1 fw-bolder px-4 rounded-circle" href="{{ url_for('render_create_list') }}">+</a>
   </div>
 </div>
+{% endif %}
 {% endblock main %}

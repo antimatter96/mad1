@@ -14,8 +14,11 @@ def cards():
 @app.route("/card", methods=['GET'])
 def render_create_card():
   lists = db.session.query(List).with_entities(List.list_id, List.name).all()
+  list_id = int(request.args.get('list_id', -1))
 
-  return render_template('board/new_card.html', errors=[])
+  disable_list = list_id in [l['list_id'] for l in lists]
+
+  return render_template('board/new_card.html', errors=[], lists=lists, list_id=list_id, disable_list=disable_list)
   return lists
 
 @app.route("/card", methods=['POST'])

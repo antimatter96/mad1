@@ -11,6 +11,15 @@ Create Card
 <div class="col-md-4 py-2">
   <form action="" method="POST" id="create-card-form">
     <div class="form-floating mb-2">
+      <select class="form-select" id="list" name="list" required placeholder="Select List" {% if disable_list %}disabled{% endif %}>
+        <option></option>
+        {% for list in lists %}
+        <option value="{{ list['list_id'] }}" {% if list['list_id'] == list_id %}selected{% endif %}>{{ list['name'] }}</option>
+        {% endfor %}
+      </select>
+      <label for="list" class="fw-bold fs-6" style="color: #495057;">List</label>
+    </div>
+    <div class="form-floating mb-2">
       <input type="title" name="title" class="form-control" id="title" placeholder="Some title" required>
       <label for="title" class="fw-bold">Title</label>
     </div>
@@ -20,14 +29,12 @@ Create Card
       <label for="title" class="fw-bold">Summary</label>
     </div>
     <div class="form-floating mb-2">
-      <select class="form-select" id="list" name="list" required>
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-      </select>
-      <label for="list" class="fw-bold">List</label>
+      <input type="date" name="deadline" class="form-control" id="deadline" placeholder="Some Deadline" required>
+      <label for="deadline" class="fw-bold">Deadline</label>
+    </div>
+    <div class="py-3 my-2 text-center custom-checkbox">
+      <label for="complete" class="fw-bold">Mark as Complete</label>
+      <input type="checkbox" name="complete" class="form-check-input" id="complete" placeholder="Some complete" required>
     </div>
     <div>
       <input type="submit" value="Create Card" class="btn btn-primary btn-lg w-100">

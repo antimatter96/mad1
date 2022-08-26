@@ -15,8 +15,6 @@ from application.errors import FieldsNotValidError
 def index():
   current_user = db.session.query(User).filter(User.user_id == session['user_id']).first()
   lists = db.session.query(List).all()
-  for li in lists:
-    print(li.cards)
   return render_template('board/index.html', errors=[], lists=lists)
   # if login ->
   # else -> render_board()
@@ -38,7 +36,7 @@ def create_list():
   if len(errors) == 0:
     db.session.begin()
     total_lists = db.session.query(List).all()
-    if len(total_lists) < 6:
+    if len(total_lists) < 5:
       try:
         new_list = List(name=name, description=description)
         db.session.add(new_list)

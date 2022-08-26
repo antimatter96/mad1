@@ -15,11 +15,11 @@
   {% if errors|length > 0 %}
     {% include 'alert.html' %}
   {% endif %}
-  <div id="main" class="container border">
-    <header class="my-2 border-bottom">
-      <h2 class="text-center">{% block header %}{% endblock %}</h2>
+  <div id="main" class="container border px-0">
+    <header class="py-2 border-bottom">
+      <h2 class="text-center mb-0 fw-bold">{% block header %}{% endblock %}</h2>
     </header>
-    <div class="row align-items-center my-2 justify-content-end">
+    <div class="row align-items-center my-2 justify-content-between px-3">
       {% block main %}{% endblock %}
     </div>
   </div>
