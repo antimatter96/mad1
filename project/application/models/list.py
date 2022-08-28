@@ -9,3 +9,6 @@ class List(db.Model):
   description = db.Column(db.String)
 
   cards = relationship("Card", back_populates="list")
+
+  creator_id = db.Column(db.Integer, db.ForeignKey("user.user_id"))
+  creator = relationship("User", back_populates="lists")

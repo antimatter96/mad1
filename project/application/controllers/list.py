@@ -16,13 +16,12 @@ def index():
   current_user = db.session.query(User).filter(User.user_id == session['user_id']).first()
   lists = db.session.query(List).all()
   return render_template('board/index.html', errors=[], lists=lists)
-  # if login ->
-  # else -> render_board()
 
 # Lists
-@app.route("/list", methods=['POST'])
+@app.route("/list/new", methods=['POST'])
 def create_list():
   app.logger.info('Request Received')
+
   name = request.form.get('name', "").strip()
   description = request.form.get('description', "").strip()
 
@@ -38,7 +37,8 @@ def create_list():
     total_lists = db.session.query(List).all()
     if len(total_lists) < 5:
       try:
-        new_list = List(name=name, description=description)
+        current_user = db.session.query(User).filter(User.user_id == session['user_id']).first()
+        new_list = List(name=name, description=description, creator=current_user)
         db.session.add(new_list)
       except Exception as e:
         app.log_exception(e)
@@ -59,8 +59,12 @@ def create_list():
   app.logger.info('everything was OK')
   return redirect(url_for('index'))
 
-@app.route("/list", methods=['GET'])
+@app.route("/list/new", methods=['GET'])
 def render_create_list():
+  return render_template('board/new_list.html', errors=[])
+
+@app.route("/list/<list_id>", methods=['GET'])
+def get_list(list_id):
   return render_template('board/new_list.html', errors=[])
 
 @app.route("/list/<list_id>", methods=['DELETE'])
@@ -68,5 +72,5 @@ def delete_list(list_id):
   return "_list_students"
 
 @app.route("/list/<list_id>", methods=['PUT'])
-def edit_list():
+def edit_list(list_id):
   return "_list_students"

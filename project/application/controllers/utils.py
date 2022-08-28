@@ -4,7 +4,6 @@ from flask import current_app as app
 from flask import session, redirect, url_for
 from application.models.user import User
 from application.database.index import db
-from application.errors import FieldsNotValidError
 
 def is_logged_in():
   if session is None or 'username' not in session or 'user_id' not in session or \

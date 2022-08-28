@@ -1,4 +1,5 @@
-from flask import current_app as app, render_template
+from flask import current_app as app
+from flask import render_template
 
 @app.errorhandler(404)
 def page_not_found(e):
