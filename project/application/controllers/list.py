@@ -54,18 +54,18 @@ def create_list():
   if len(errors) > 0:
     errors = [str(error) for error in errors]
     app.logger.info('Some errors were present : %s', ','.join(errors))
-    return render_template('board/new_list.html', errors=errors)
+    return render_template('lists/new_list.html', errors=errors)
 
   app.logger.info('everything was OK')
   return redirect(url_for('index'))
 
 @app.route("/list/new", methods=['GET'])
 def render_create_list():
-  return render_template('board/new_list.html', errors=[])
+  return render_template('lists/new_list.html', errors=[])
 
 @app.route("/list/<list_id>", methods=['GET'])
 def get_list(list_id):
-  return render_template('board/new_list.html', errors=[])
+  return render_template('lists/new_list.html', errors=[])
 
 @app.route("/list/<list_id>", methods=['DELETE'])
 def delete_list(list_id):

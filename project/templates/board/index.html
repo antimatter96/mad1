@@ -22,7 +22,7 @@ Board
 {% set col_offset = "offset-md-5" %}
 {% endif %}
 {% for list in lists %}
-  <div class="{{col_width}} py-2 px-0 align-self-baseline flex-column">{% include 'board/list.html' %}</div>
+  <div class="{{col_width}} py-2 px-0 align-self-baseline flex-column">{% include 'board/board_list.html' %}</div>
 {% endfor %}
 
 {% if lists|length < 5 %}

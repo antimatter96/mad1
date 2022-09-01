@@ -17,7 +17,7 @@ def render_create_card():
   list_id = int(request.args.get('list_id', -1))
   disable_list = list_id in [l['list_id'] for l in lists]
 
-  return render_template('board/new_card.html', errors=[], lists=lists, list_id=list_id, disable_list=disable_list)
+  return render_template('cards/new_card.html', errors=[], lists=lists, list_id=list_id, disable_list=disable_list)
 
 @app.route("/card", methods=['POST'])
 @ensure_logged_in
@@ -78,7 +78,7 @@ def create_card():
     disable_list = list_id in [l['list_id'] for l in lists]
     errors = [str(error) for error in errors]
     app.logger.info('Some errors were present : %s', ','.join(errors))
-    return render_template('board/new_card.html', errors=errors, lists=lists, list_id=list_id, disable_list=disable_list)
+    return render_template('cards/new_card.html', errors=errors, lists=lists, list_id=list_id, disable_list=disable_list)
 
   return redirect(url_for('list_card', card_id=new_card.card_id))
 
