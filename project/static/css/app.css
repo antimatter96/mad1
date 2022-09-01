@@ -36,9 +36,10 @@ header > h2 {
 
 #main-alert {
   position: fixed;
-  width: 50%;
-  left: 25%;
+  width: 30%;
+  left: 35%;
   top: 1em;
+  z-index: 99999;
 }
 
 #main {

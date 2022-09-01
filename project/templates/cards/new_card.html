@@ -12,7 +12,7 @@ Create Card
   <form action="" method="POST" id="create-card-form">
     <div class="form-floating mb-2">
       <select class="form-select" id="list_id" name="list_id" required placeholder="Select List" {% if disable_list %}disabled{% endif %}>
-        <option></option>
+        <option value="" disabled {% if not disable_list %}selected{% endif %}>Select List</option>
         {% for list in lists %}
         <option value="{{ list['list_id'] }}" {% if list['list_id'] == list_id %}selected{% endif %}>{{ list['name'] }}</option>
         {% endfor %}

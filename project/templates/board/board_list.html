@@ -1,6 +1,6 @@
 <div class="card bg-white mb-2 py-0 text-black-50 border-0">
   <div class="card-header py-2 text-center border-0">
-    <h4 class="mb-0">{{ list['name'] }}</h3>
+    <h4 class="mb-0"><a href="{{ url_for('render_list', list_id=list['list_id']) }}">{{ list['name'] }}</a></h3>
   </div>
 </div>
 {% include 'cards/index.html' %}
