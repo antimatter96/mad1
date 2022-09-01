@@ -9,6 +9,7 @@
 		"files.eol": "\n",
 		"files.insertFinalNewline": true,
 		"editor.fontSize": 14,
+		"python.defaultInterpreterPath": "/usr/local/bin/python3.9",
 	},
 	"extensions": {
 		"recommendations": [
