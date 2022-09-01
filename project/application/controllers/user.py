@@ -6,10 +6,16 @@ import bcrypt
 from application.models.user import User
 from application.database.index import db
 from application.errors import FieldsNotValidError
+from application.controllers.utils import get_redirect_error
 
 @app.route("/signup", methods=['GET'])
 def render_signup():
-  return render_template('users/signup.html', errors=[])
+  errors = []
+  redirect_error = get_redirect_error()
+  if redirect_error != None:
+    errors.append(redirect_error)
+
+  return render_template('users/signup.html', errors=errors)
 
 @app.route("/signup", methods=['POST'])
 def signup():
@@ -64,7 +70,12 @@ def signup():
 
 @app.route("/login", methods=['GET'])
 def render_signin():
-  return render_template('users/login.html', errors=[])
+  errors = []
+  redirect_error = get_redirect_error()
+  if redirect_error != None:
+    errors.append(redirect_error)
+
+  return render_template('users/login.html', errors=errors)
 
 @app.route("/login", methods=['POST'])
 def login():

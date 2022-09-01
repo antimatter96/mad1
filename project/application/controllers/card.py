@@ -8,16 +8,21 @@ from application.models.list import List
 from application.database.index import db
 from application.errors import FieldsNotValidError
 from application.models.user import User
-from application.controllers.utils import ensure_logged_in
+from application.controllers.utils import ensure_logged_in, get_redirect_error
 
 @app.route("/card", methods=['GET'])
 @ensure_logged_in
 def render_create_card():
+  errors = []
+  redirect_error = get_redirect_error()
+  if redirect_error != None:
+    errors.append(redirect_error)
+
   lists = db.session.query(List).with_entities(List.list_id, List.name).all()
   list_id = int(request.args.get('list_id', -1))
   disable_list = list_id in [l['list_id'] for l in lists]
 
-  return render_template('cards/new_card.html', errors=[], lists=lists, list_id=list_id, disable_list=disable_list)
+  return render_template('cards/new_card.html', errors=errors, lists=lists, list_id=list_id, disable_list=disable_list)
 
 @app.route("/card", methods=['POST'])
 @ensure_logged_in
