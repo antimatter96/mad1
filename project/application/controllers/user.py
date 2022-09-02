@@ -38,7 +38,7 @@ def signup():
   try:
     username = validate_email(username).email
   except Exception as e:
-    errors.append(FieldsNotValidError("User name " +  str(e)))
+    errors.append(FieldsNotValidError("User name " + str(e)))
 
   if len(errors) == 0:
     app.logger.info('Searcing for user')

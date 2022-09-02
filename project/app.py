@@ -5,11 +5,9 @@ from flask_migrate import Migrate
 from application.database.index import db
 from config import LocalDevelopmentConfig, TestingConfig
 
-
 import logging
 
 logging.basicConfig(filename='debug.log', level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
-
 
 app = None
 
@@ -37,7 +35,6 @@ def create_app():
 
 app = create_app()
 from application.controllers.index import *
-
 
 if __name__ == '__main__':
   # Run the Flask app
