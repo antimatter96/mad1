@@ -49,6 +49,7 @@ def signup():
         hashed = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())
         new_user = User(username=username, name=name, password=hashed, active=True)
         db.session.add(new_user)
+        db.session.commit()
       except Exception as e:
         app.log_exception(e)
         app.logger.error(e)
@@ -56,7 +57,6 @@ def signup():
         errors.append(e)
       else:
         app.logger.info('adding user')
-        db.session.commit()
     else:
       errors.append(FieldsNotValidError("Account with email already exists"))
 

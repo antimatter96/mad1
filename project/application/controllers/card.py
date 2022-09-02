@@ -67,14 +67,14 @@ def create_card():
       try:
         new_card = Card(title=title, content=content, deadline=deadline, complete=complete, creator=current_user, list=current_list)
         db.session.add(new_card)
+        db.session.commit()
       except Exception as e:
         app.log_exception(e)
         app.logger.error(e)
         db.session.rollback()
         errors.append(e)
       else:
-        app.logger.info('adding card')
-        db.session.commit()
+        app.logger.info('card added')
     else:
       errors.append(FieldsNotValidError("List not found"))
 

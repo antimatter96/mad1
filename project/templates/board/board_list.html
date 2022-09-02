@@ -1,9 +1,11 @@
 <div class="card bg-white mb-2 py-0 text-black-50 border-0">
   <div class="card-header py-2 text-center border-0">
-    <h4 class="mb-0"><a href="{{ url_for('render_list', list_id=list['list_id']) }}">{{ list['name'] }}</a></h3>
+    <h4 class="mb-0">
+      <a href="{{ url_for('render_list', list_id=list['list_id']) }}" class="fw-semibold text-decoration-none">{{ list['name'] }}</a>
+    </h4>
   </div>
 </div>
-{% include 'cards/index.html' %}
+{% include 'cards/board_card.html' %}
 <div class="card text-white shadow-none border-0 mt-4">
   <div class="align-self-center">
     <a class="btn btn-primary btn-lg fs-2 fw-bolder px-4 rounded-circle"

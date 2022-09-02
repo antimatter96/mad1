@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}List - {{ list_obj['name'] }}{% endblock %}
+
+{% block header %}
+List - {{ list_obj['name'] }}
+{% endblock %}
+
+{% block main %}
+<div class="col-md-4 py-4"></div>
+<div class="col-md-4 py-2">
+  {{ list_obj['name'] }}
+  {{ list_obj['description'] }}
+
+  {%  for card in list_obj.cards %}
+    {% include 'cards/board_card.html' %}
+  {% endfor %}
+</div>
+<div class="col-md-4 py-2"></div>
+{% endblock main %}
