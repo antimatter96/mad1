@@ -39,7 +39,7 @@ def ensure_logged_in(f):
   return wrapper
 
 def create_redirect_error(error_str):
-  return base64.b64encode(bytes(error_str, "utf-8"))
+  return base64.b64encode(bytes(error_str, "utf-8")).decode("utf-8")
 
 def get_redirect_error():
   encoded_redirect_error = request.args.get('redirect_error', "").strip()

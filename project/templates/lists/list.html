@@ -9,12 +9,19 @@ List - {{ list_obj['name'] }}
 {% block main %}
 <div class="col-md-4 py-4"></div>
 <div class="col-md-4 py-2">
-  {{ list_obj['name'] }}
-  {{ list_obj['description'] }}
+  <figure>
+    <blockquote class="blockquote">
+      <p class="mb-0">{{ list_obj['description'] }}</p>
+    </blockquote>
+  </figure>
+</div>
+<div class="col-md-4 py-2"></div>
 
+<div class="col-md-1 py-4"></div>
+<div class="col-md-10 py-2">
   {%  for card in list_obj.cards %}
     {% include 'cards/board_card.html' %}
   {% endfor %}
 </div>
-<div class="col-md-4 py-2"></div>
+<div class="col-md-1 py-2"></div>
 {% endblock main %}

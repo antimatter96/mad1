@@ -95,6 +95,7 @@ def edit_list(list_id):
   name = request.form.get('name', "").strip()
   description = request.form.get('description', "").strip()
 
+  errors = []
   if len(name) == 0:
     errors.append(FieldsNotValidError("Name is required"))
   if len(description) == 0:
@@ -130,7 +131,8 @@ def delete_list(list_id):
 def render_list(list_id):
   list_obj = db.session.query(List).filter(List.list_id == list_id).first()
   if list_obj == None:
-    encoded_redirect_error = create_redirect_error("List with id " + list_id + " does not exist")
+    encoded_redirect_error = create_redirect_error("List with id " + str(list_id) + " does not exist")
     return redirect(url_for('render_create_list', redirect_error=encoded_redirect_error))
 
-  return render_template('lists/list.html', errors=[], list_obj=list_obj)
+  lists = db.session.query(List).all()
+  return render_template('lists/list.html', errors=[], list_obj=list_obj, lists=lists)

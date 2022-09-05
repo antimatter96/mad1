@@ -5,7 +5,9 @@
     </h4>
   </div>
 </div>
-{% include 'cards/board_card.html' %}
+{% for card in list.cards %}
+  {% include 'cards/board_card.html' %}
+{% endfor %}
 <div class="card text-white shadow-none border-0 mt-4">
   <div class="align-self-center">
     <a class="btn btn-primary btn-lg fs-2 fw-bolder px-4 rounded-circle"

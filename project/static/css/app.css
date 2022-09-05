@@ -57,3 +57,10 @@ header > h2 {
 .custom-checkbox {
   border: 1px solid #ced4da;
 }
+
+.dropdown-item:hover label,
+.dropdown-item label:hover,
+.dropdown-item:focus label,
+.dropdown-item label:focus {
+  color: #fff;
+}

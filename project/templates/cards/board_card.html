@@ -1,12 +1,17 @@
-<div class="card text-white bg-primary mb-1">
+<div class="card mb-1">
   <div class="card-header px-2 py-2 mb-0">
-    <h5 class="card-title mb-0">Primary card title</h5>
+    <h5 class="card-title mb-0">{{ card['title'] }}</h5>
   </div>
   <div class="card-body pb-0">
-    <p class="card-text">Some quick text to card title the card's content.</p>
-    <p class="card-text">Some quick text to card title the card's content.</p>
-    <p class="card-text mb-2"><span class="fw-bold">Due Date:</span> 2022-01-22</p>
-    <p class="card-text mb-2"><span class="fw-bold">Status:</span> Not Complete</p>
+    <p class="card-text">{{ card['content'] }}</p>
+    <p class="card-text mb-2"><span class="fw-bold">Due Date: </span>{{ card['deadline'].strftime('%Y-%m-%d') }}</p>
+    <p class="card-text mb-2"><span class="fw-bold">Status: </span>
+      {% if card['complete'] %}
+      <span class="text-success fw-bold">Completed</span>
+      {% else %}
+      <span class="text-danger fw-bold">Pending</span>
+      {% endif %}
+    </p>
   </div>
   <div class="card-footer bg-white rounded-0 py-2">
     <div class="dropdown dropdown-center text-center">
@@ -14,11 +19,53 @@
         aria-expanded="false"><span class="fw-bold">Actions</span></a>
       <div class="dropdown-menu w-100 py-1">
         <a class="dropdown-item" href="#">Edit</a>
-        <a class="dropdown-item" href="#">Move List</a>
-        <a class="dropdown-item" href="#">Something else here</a>
+        <a class="dropdown-item" href="#">
+          <form action="{{ url_for('move_card') }}" method="POST" id="create-card-form">
+            <div class="row">
+              <label for="list_id" class="col-4 col-form-label py-0 fw-normal">Move to</label>
+              <div class="col-8">
+                <select class="form-select py-0" id="list_id" name="list_id" required placeholder="Select List" onchange="changeList(event)">
+                  {% for list in lists %}
+                  <option value="{{ list['list_id']}}" {% if list['list_id']==card.list['list_id'] %} selected {% endif %}>{{ list['name'] }}</option>
+                  {% endfor %}
+                </select>
+                <input name="card_id" id="card_id" value="{{ card['card_id'] }}" hidden>
+              </div>
+            </div>
+            <input type="submit" value="Create Card" hidden>
+          </form>
+        </a>
         <div class="dropdown-divider mt-0"></div>
         <a class="dropdown-item bg-danger fw-bold text-white hover-danger" href="#">Delete</a>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  function changeList(e, x, y) {
+    e.target.closest('form').submit();
+  }
+</script>
+<style>
+  .dropdown-menu li {
+    position: relative;
+  }
+
+  .dropdown-menu .dropdown-submenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: -7px;
+  }
+
+  .dropdown-menu .dropdown-submenu-left {
+    right: 100%;
+    left: auto;
+  }
+
+  .dropdown-menu>li:hover>.dropdown-submenu {
+    display: block;
+  }
+
+</style>

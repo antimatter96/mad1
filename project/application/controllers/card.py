@@ -6,9 +6,10 @@ from application.models.card import Card
 from application.models.list import List
 
 from application.database.index import db
-from application.errors import FieldsNotValidError
+from application.errors import FieldsNotValidError, ResourceNotFound
 from application.models.user import User
 from application.controllers.utils import ensure_logged_in, get_redirect_error
+from application.controllers.utils import create_redirect_error
 
 @app.route("/card", methods=['GET'])
 @ensure_logged_in
@@ -32,7 +33,7 @@ def create_card():
   content = request.form.get('content', "").strip()
   deadline = request.form.get('deadline', "").strip()
   list_id = request.form.get('list_id', "").strip()
-  complete = request.form.get('compete', "").strip()
+  complete = request.form.get('complete', "").strip()
 
   errors = []
 
@@ -105,7 +106,55 @@ def list_card(card_id):
 @app.route("/move_card", methods=['POST'])
 @ensure_logged_in
 def move_card():
-  ...
+  list_id = request.form.get('list_id', "").strip()
+  card_id = request.form.get('card_id', "").strip()
+
+  errors = []
+
+  if len(list_id) == 0:
+    errors.append(FieldsNotValidError("List is requried"))
+  if len(card_id) == 0:
+    errors.append(FieldsNotValidError("Card is requried"))
+
+  if len(list_id) > 0:
+    try:
+      list_id = int(list_id)
+    except:
+      errors.append(FieldsNotValidError("List is requried"))
+
+  if len(card_id) > 0:
+    try:
+      card_id = int(card_id)
+    except:
+      errors.append(FieldsNotValidError("Card is requried"))
+
+  list_obj = db.session.query(List).filter(List.list_id == list_id).first()
+  if list_obj == None:
+    errors.append(ResourceNotFound("List with id " + str(list_id) + " does not exist"))
+
+  card_obj = db.session.query(Card).filter(Card.card_id == card_id).first()
+  if card_obj == None:
+    errors.append(ResourceNotFound("Card with id " + str(card_id) + " does not exist"))
+
+  if len(errors) == 0:
+    try:
+      card_obj.list = list_obj
+      db.session.commit()
+    except Exception as e:
+      app.log_exception(e)
+      app.logger.error(e)
+      db.session.rollback()
+      errors.append(e)
+    else:
+      app.logger.info('moved card')
+
+  if len(errors) > 0:
+    errors = [str(error) for error in errors]
+    app.logger.info('Some errors were present : %s', ','.join(errors))
+    encoded_redirect_error = create_redirect_error("\n".join(errors))
+    return redirect(request.referrer + "?redirect_error={0}".format(encoded_redirect_error))
+
+  return redirect(request.referrer)
 
 @app.route("/list_orphans", methods=['GET'])
 @ensure_logged_in
