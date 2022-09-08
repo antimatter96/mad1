@@ -74,6 +74,8 @@ def render_create_list():
 
   return render_template('lists/new_list.html', errors=errors)
 
+### Individual Lists
+
 @app.route("/list/<list_id>/edit", methods=['GET'])
 @ensure_logged_in
 def render_edit_list(list_id):
@@ -82,7 +84,8 @@ def render_edit_list(list_id):
     encoded_redirect_error = create_redirect_error("List with id " + list_id + " does not exist")
     return redirect(url_for('render_create_list', redirect_error=encoded_redirect_error))
 
-  return render_template('lists/edit_list.html', errors=[], list_obj=list_obj)
+  lists = db.session.query(List).all()
+  return render_template('lists/edit_list.html', errors=[], list_obj=list_obj, lists=lists, disable_list=True)
 
 @app.route("/list/<list_id>/edit", methods=['POST'])
 @ensure_logged_in
@@ -122,9 +125,76 @@ def edit_list(list_id):
   app.logger.info('everything was OK')
   return redirect(url_for('render_list', list_id=list_id))
 
-@app.route("/lists/<list_id>", methods=['DELETE'])
+@app.route("/lists/<list_id>/delete", methods=['POST'])
 def delete_list(list_id):
-  return "_list_students"
+  list_obj = db.session.query(List).filter(List.list_id == list_id).first()
+  if list_obj == None:
+    encoded_redirect_error = create_redirect_error("List with id " + str(list_id) + " does not exist")
+    return redirect(url_for('render_create_list', redirect_error=encoded_redirect_error))
+
+  mode = request.form.get('mode', "").strip()
+  new_list_id = request.form.get('list_id', "").strip()
+
+  errors = []
+
+  if len(mode) == 0:
+    errors.append(FieldsNotValidError("Mode is requried"))
+  if mode != "move" and mode != "delete":
+    errors.append(FieldsNotValidError("Mode should be move / delete"))
+
+  if mode == "move":
+    if len(new_list_id) == 0:
+      errors.append(FieldsNotValidError("List is requried"))
+
+    if len(new_list_id) > 0:
+      try:
+        new_list_id = int(new_list_id)
+      except:
+        errors.append(FieldsNotValidError("List is requried"))
+
+    if len(errors) == 0:
+      new_list_obj = db.session.query(List).filter(List.list_id == new_list_id).first()
+
+      if list_obj == None:
+        new_list_obj = create_redirect_error("List with id " + str(new_list_id) + " does not exist")
+        return redirect(url_for('render_create_list', redirect_error=encoded_redirect_error))
+
+  if len(errors) == 0:
+    if mode == "delete":
+      try:
+        for card in list_obj.cards:
+          db.session.delete(card)
+        db.session.delete(list_obj)
+        db.session.commit()
+      except Exception as e:
+        app.log_exception(e)
+        app.logger.error(e)
+        db.session.rollback()
+        errors.append(e)
+      else:
+        app.logger.info('list deleted')
+    else:
+      try:
+        card_ids = [card.card_id for card in list_obj.cards]
+        db.session.delete(list_obj)
+        db.session.flush()
+        db.session.query(Card).filter(Card.card_id.in_(card_ids)).update({"parent_id": new_list_id})
+        db.session.commit()
+      except Exception as e:
+        app.log_exception(e)
+        app.logger.error(e)
+        db.session.rollback()
+        errors.append(e)
+      else:
+        app.logger.info('list deleted')
+
+  if len(errors) > 0:
+    errors = [str(error) for error in errors]
+    app.logger.info('Some errors were present : %s', ','.join(errors))
+    encoded_redirect_error = create_redirect_error("\n".join(errors))
+    return redirect(url_for('render_edit_list', list_id=list_id, redirect_error=encoded_redirect_error))
+
+  return redirect(url_for('index'))
 
 @app.route("/list/<list_id>", methods=['GET'])
 @ensure_logged_in

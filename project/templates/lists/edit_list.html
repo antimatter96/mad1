@@ -25,4 +25,63 @@ Edit list
   </form>
 </div>
 <div class="col-md-4 py-2"></div>
+
+<hr>
+
+<div class="col-md-4 py-4"></div>
+<div class="col-md-4 py-2">
+  <h4 class="text-center fw-bold">Delete list</h4>
+  <form action="{{ url_for('delete_list', list_id=list_obj['list_id']) }}" method="POST" id="delete-list-form">
+    <fieldset class="form-group">
+      <h6>How should the cards in the list be handled ?</h6>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="mode" id="radio_delete" value="delete" checked="" onchange="handleClick(this)">
+        <label class="form-check-label" for="radio_delete">Delete cards</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="mode" id="radio_move" value="move" onchange="handleClick(this)">
+        <label class="form-check-label d-flex justify-content-between" for="radio_move">
+          <p class="d-block mb-0 w-40">Move to list</p>
+          <select class="form-select d-block w-60 py-half fw-bolder" id="list_list" name="list_id" placeholder="Select List">
+            <option value="" disabled selected>Select List</option>
+            {% for list in lists %}
+            {% if list['list_id'] != list_obj['list_id'] %}
+              <option value="{{ list['list_id'] }}">{{ list['name'] }}</option>
+            {% endif %}
+            {% endfor %}
+          </select>
+        </label>
+      </div>
+    </fieldset>
+    <div>
+      <input type="submit" value="Delete" class="btn btn-danger btn-lg w-100">
+    </div>
+  </form>
+</div>
+<div class="col-md-4 py-2"></div>
+
+<script>
+  let mode = "delete"
+  let form = document.getElementById("delete-list-form");
+  let listSelect = document.getElementById("list_list");
+
+  form.addEventListener('submit', (e) => {
+    if (!confirm("Do you really want to delete list " + "{{ list_obj['name'] }}" + " and " + mode + " all cards")) {
+      e.preventDefault();
+    }
+  });
+
+  function handleClick(radio) {
+    mode = radio.value;
+    if(mode == "delete"){
+      listSelect.disabled = true;
+      listSelect.enabled = "";
+      listSelect.required = false;
+    } else {
+      listSelect.disabled = "";
+      listSelect.enabled = true;
+      listSelect.required = true;
+    }
+  }
+</script>
 {% endblock main %}
