@@ -6,7 +6,8 @@ from application.models.user import User
 
 from application.database.index import db
 
-from application.controllers.utils import ensure_logged_in, get_redirect_error, create_redirect_error
+from application.controllers.utils import get_redirect_error, create_redirect_error
+from application.controllers.decorators import ensure_logged_in, ensure_list_exists
 from application.errors import FieldsNotValidError
 
 # Board
@@ -24,6 +25,7 @@ def index():
 
 # Lists
 @app.route("/lists/new", methods=['POST'])
+@ensure_logged_in
 def create_list():
   app.logger.info('Request Received')
 
@@ -78,23 +80,20 @@ def render_create_list():
 
 @app.route("/list/<list_id>/edit", methods=['GET'])
 @ensure_logged_in
-def render_edit_list(list_id):
-  list_obj = db.session.query(List).filter(List.list_id == list_id).first()
-  if list_obj == None:
-    encoded_redirect_error = create_redirect_error("List with id " + list_id + " does not exist")
-    return redirect(url_for('render_create_list', redirect_error=encoded_redirect_error))
+@ensure_list_exists
+def render_edit_list(list_obj):
+  errors = []
+  redirect_error = get_redirect_error()
+  if redirect_error != None:
+    errors.append(redirect_error)
 
   lists = db.session.query(List).all()
-  return render_template('lists/edit_list.html', errors=[], list_obj=list_obj, lists=lists, disable_list=True)
+  return render_template('lists/edit_list.html', errors=errors, list_obj=list_obj, lists=lists, disable_list=True)
 
 @app.route("/list/<list_id>/edit", methods=['POST'])
 @ensure_logged_in
-def edit_list(list_id):
-  list_obj = db.session.query(List).filter(List.list_id == list_id).first()
-  if list_obj == None:
-    encoded_redirect_error = create_redirect_error("List with id " + list_id + " does not exist")
-    return redirect(url_for('render_create_list', redirect_error=encoded_redirect_error))
-
+@ensure_list_exists
+def edit_list(list_obj):
   name = request.form.get('name', "").strip()
   description = request.form.get('description', "").strip()
 
@@ -126,12 +125,9 @@ def edit_list(list_id):
   return redirect(url_for('render_list', list_id=list_id))
 
 @app.route("/lists/<list_id>/delete", methods=['POST'])
-def delete_list(list_id):
-  list_obj = db.session.query(List).filter(List.list_id == list_id).first()
-  if list_obj == None:
-    encoded_redirect_error = create_redirect_error("List with id " + str(list_id) + " does not exist")
-    return redirect(url_for('render_create_list', redirect_error=encoded_redirect_error))
-
+@ensure_logged_in
+@ensure_list_exists
+def delete_list(list_obj):
   mode = request.form.get('mode', "").strip()
   new_list_id = request.form.get('list_id', "").strip()
 
@@ -155,8 +151,8 @@ def delete_list(list_id):
     if len(errors) == 0:
       new_list_obj = db.session.query(List).filter(List.list_id == new_list_id).first()
 
-      if list_obj == None:
-        new_list_obj = create_redirect_error("List with id " + str(new_list_id) + " does not exist")
+      if new_list_obj == None:
+        encoded_redirect_error = create_redirect_error("List with id " + str(new_list_id) + " does not exist")
         return redirect(url_for('render_create_list', redirect_error=encoded_redirect_error))
 
   if len(errors) == 0:
@@ -198,11 +194,7 @@ def delete_list(list_id):
 
 @app.route("/list/<list_id>", methods=['GET'])
 @ensure_logged_in
-def render_list(list_id):
-  list_obj = db.session.query(List).filter(List.list_id == list_id).first()
-  if list_obj == None:
-    encoded_redirect_error = create_redirect_error("List with id " + str(list_id) + " does not exist")
-    return redirect(url_for('render_create_list', redirect_error=encoded_redirect_error))
-
+@ensure_list_exists
+def render_list(list_obj):
   lists = db.session.query(List).all()
   return render_template('lists/list.html', errors=[], list_obj=list_obj, lists=lists)

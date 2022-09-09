@@ -8,6 +8,7 @@ class Card(db.Model):
   title = db.Column(db.String, nullable=False)
   content = db.Column(db.Text, nullable=False)
   deadline = db.Column(db.DateTime, nullable=False)
+  completed_on = db.Column(db.DateTime, nullable=True)
   complete = db.Column(db.Boolean, nullable=False, default=False)
 
   parent_id = db.Column(db.Integer, db.ForeignKey("list.list_id"))
