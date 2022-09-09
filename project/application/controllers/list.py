@@ -122,7 +122,7 @@ def edit_list(list_obj):
     return render_template('lists/edit_list.html', errors=errors, list_obj=list_obj)
 
   app.logger.info('everything was OK')
-  return redirect(url_for('render_list', list_id=list_id))
+  return redirect(url_for('render_list', list_id=list_obj.list_id))
 
 @app.route("/lists/<list_id>/delete", methods=['POST'])
 @ensure_logged_in
@@ -188,7 +188,7 @@ def delete_list(list_obj):
     errors = [str(error) for error in errors]
     app.logger.info('Some errors were present : %s', ','.join(errors))
     encoded_redirect_error = create_redirect_error("\n".join(errors))
-    return redirect(url_for('render_edit_list', list_id=list_id, redirect_error=encoded_redirect_error))
+    return redirect(url_for('render_edit_list', list_id=list_obj.list_id, redirect_error=encoded_redirect_error))
 
   return redirect(url_for('index'))
 

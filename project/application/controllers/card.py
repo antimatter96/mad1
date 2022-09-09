@@ -172,7 +172,7 @@ def edit_card(card):
     errors = [str(error) for error in errors]
     app.logger.info('Some errors were present : %s', ','.join(errors))
     encoded_redirect_error = create_redirect_error("\n".join(errors))
-    return redirect(url_for('render_card_list', card_id=card_id, redirect_error=encoded_redirect_error))
+    return redirect(url_for('render_card_list', card_id=card.card_id, redirect_error=encoded_redirect_error))
 
   return redirect(url_for('list_card', card_id=card.card_id))
 
