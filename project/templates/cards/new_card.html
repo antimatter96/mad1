@@ -10,6 +10,7 @@ Create Card
 <div class="col-md-4 py-4"></div>
 <div class="col-md-4 py-2">
   <form action="" method="POST" id="create-card-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="form-floating mb-2">
       <select class="form-select" id="list_id" name="list_id" required placeholder="Select List" {% if disable_list %}disabled{% endif %}>
         <option value="" disabled {% if not disable_list %}selected{% endif %}>Select List</option>

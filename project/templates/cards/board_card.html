@@ -21,6 +21,7 @@
         <a class="dropdown-item" href="#">Edit</a>
         <a class="dropdown-item" href="#">
           <form action="{{ url_for('move_card') }}" method="POST" id="create-card-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <div class="row">
               <label for="list_id" class="col-4 col-form-label py-0 fw-normal">Move to</label>
               <div class="col-8">

@@ -10,6 +10,7 @@ Edit Card
 <div class="col-md-4 py-4"></div>
 <div class="col-md-4 py-2">
   <form action="" method="POST" id="create-card-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="form-floating mb-2">
       <input type="title" name="title" class="form-control" id="title" placeholder="Some title" required>
       <label for="title" class="fw-bold">Title</label>

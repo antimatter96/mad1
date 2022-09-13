@@ -10,5 +10,5 @@ def not_authorized(e):
   return render_template('403.html'), 403
 
 from application.controllers.user import *
-from application.controllers.card import *
+from application.controllers.card.index import *
 from application.controllers.list.index import *

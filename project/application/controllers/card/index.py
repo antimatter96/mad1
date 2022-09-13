@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from flask import current_app as app
 from flask import render_template, request, redirect, url_for, session
 from application.models.card import Card
@@ -8,8 +7,9 @@ from application.models.list import List
 from application.database.index import db
 from application.errors import FieldsNotValidError, ResourceNotFound
 from application.models.user import User
-from application.controllers.utils import get_redirect_error, create_redirect_error
+from application.controllers.utils import get_redirect_error, create_redirect_error, flatten_from_errors
 from application.controllers.decorators import ensure_card_exists, ensure_logged_in
+from application.controllers.card.form import CardForm, MoveCard
 
 @app.route("/cards/new", methods=['GET'])
 @ensure_logged_in
@@ -28,39 +28,19 @@ def render_create_card():
 @app.route("/cards/new", methods=['POST'])
 @ensure_logged_in
 def create_card():
-  print(request.form)
-  title = request.form.get('title', "").strip()
-  content = request.form.get('content', "").strip()
-  deadline = request.form.get('deadline', "").strip()
-  list_id = request.form.get('list_id', "").strip()
-  complete = request.form.get('complete', "").strip()
+  form = CardForm()
+  form.validate()
+  errors = flatten_from_errors(form.form_errors)
 
-  errors = []
-
-  if len(title) == 0:
-    errors.append(FieldsNotValidError("Title is required"))
-  if len(content) == 0:
-    errors.append(FieldsNotValidError("Summary is required"))
-  if len(deadline) == 0:
-    errors.append(FieldsNotValidError("Deadline is requried"))
-  if len(list_id) == 0:
-    errors.append(FieldsNotValidError("List is requried"))
-
-  if len(list_id) > 0:
-    try:
-      list_id = int(list_id)
-    except:
-      errors.append(FieldsNotValidError("List is requried"))
-  if len(deadline) > 0:
-    try:
-      deadline = datetime.strptime(deadline, "%Y-%m-%d")
-    except Exception as e:
-      errors.append(FieldsNotValidError("Deadline is requried"))
-
-  complete = complete == 'on'
+  list_id = form.list_id.data
 
   new_card = None
   if len(errors) == 0:
+    title = form.title.data
+    content = form.content.data
+    deadline = form.deadline.data
+    complete = form.complete.data
+
     app.logger.info('Searcing for user')
     current_user = db.session.query(User).filter(User.user_id == session['user_id']).first()
     current_list = db.session.query(List).filter(List.list_id == list_id).first()
@@ -117,37 +97,17 @@ def render_edit_card(card):
 @ensure_logged_in
 @ensure_card_exists
 def edit_card(card):
-  title = request.form.get('title', "").strip()
-  content = request.form.get('content', "").strip()
-  deadline = request.form.get('deadline', "").strip()
-  list_id = request.form.get('list_id', "").strip()
-  complete = request.form.get('complete', "").strip()
-
-  errors = []
-
-  if len(title) == 0:
-    errors.append(FieldsNotValidError("Title is required"))
-  if len(content) == 0:
-    errors.append(FieldsNotValidError("Summary is required"))
-  if len(deadline) == 0:
-    errors.append(FieldsNotValidError("Deadline is requried"))
-  if len(list_id) == 0:
-    errors.append(FieldsNotValidError("List is requried"))
-
-  if len(list_id) > 0:
-    try:
-      list_id = int(list_id)
-    except:
-      errors.append(FieldsNotValidError("List is requried"))
-  if len(deadline) > 0:
-    try:
-      deadline = datetime.strptime(deadline, "%Y-%m-%d")
-    except Exception as e:
-      errors.append(FieldsNotValidError("Deadline is requried"))
-
-  complete = complete == 'on'
+  form = CardForm()
+  form.validate()
+  errors = flatten_from_errors(form.form_errors)
 
   if len(errors) == 0:
+    title = form.title.data
+    content = form.content.data
+    deadline = form.deadline.data
+    complete = form.complete.data
+    list_id = form.list_id.data
+
     app.logger.info('Searcing for user')
     current_list = db.session.query(List).filter(List.list_id == list_id).first()
     if current_list != None:
@@ -179,35 +139,23 @@ def edit_card(card):
 @app.route("/move_card", methods=['POST'])
 @ensure_logged_in
 def move_card():
-  list_id = request.form.get('list_id', "").strip()
-  card_id = request.form.get('card_id', "").strip()
+  form = MoveCard()
+  form.validate()
+  errors = flatten_from_errors(form.form_errors)
 
-  errors = []
+  list_id = form.list_id.data
+  card_id = form.card_id.data
 
-  if len(list_id) == 0:
-    errors.append(FieldsNotValidError("List is requried"))
-  if len(card_id) == 0:
-    errors.append(FieldsNotValidError("Card is requried"))
+  list_obj = None
+  card_obj = None
+  if len(errors) == 0:
+    list_obj = db.session.query(List).filter(List.list_id == list_id).first()
+    if list_obj == None:
+      errors.append(ResourceNotFound("List with id " + str(list_id) + " does not exist"))
 
-  if len(list_id) > 0:
-    try:
-      list_id = int(list_id)
-    except:
-      errors.append(FieldsNotValidError("List is requried"))
-
-  if len(card_id) > 0:
-    try:
-      card_id = int(card_id)
-    except:
-      errors.append(FieldsNotValidError("Card is requried"))
-
-  list_obj = db.session.query(List).filter(List.list_id == list_id).first()
-  if list_obj == None:
-    errors.append(ResourceNotFound("List with id " + str(list_id) + " does not exist"))
-
-  card_obj = db.session.query(Card).filter(Card.card_id == card_id).first()
-  if card_obj == None:
-    errors.append(ResourceNotFound("Card with id " + str(card_id) + " does not exist"))
+    card_obj = db.session.query(Card).filter(Card.card_id == card_id).first()
+    if card_obj == None:
+      errors.append(ResourceNotFound("Card with id " + str(card_id) + " does not exist"))
 
   if len(errors) == 0:
     try:

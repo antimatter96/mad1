@@ -1,0 +1,24 @@
+from flask_wtf import FlaskForm
+from wtforms import StringField, SelectField, IntegerField, ValidationError, DateTimeField, RadioField, BooleanField
+from wtforms.validators import DataRequired, Length
+
+class CardForm(FlaskForm):
+  title = StringField(
+      'title',
+      validators=[DataRequired(message='Title is required'),
+                  Length(min=1, max=20, message="Title should be between 2 and 20 characters")]
+  )
+  content = StringField(
+      'content',
+      validators=[
+          DataRequired(message='Summary is required'),
+          Length(min=1, max=20, message="Summary should be between 2 and 20 characters")
+      ]
+  )
+  deadline = DateTimeField('deadline', validators=[DataRequired('Deadline is required')], format="%Y-%m-%d")
+  list_id = IntegerField('list_id', validators=[DataRequired(message='List is required')])
+  complete = BooleanField('complete')
+
+class MoveCard(FlaskForm):
+  list_id = IntegerField('list_id', validators=[DataRequired(message='List is required')])
+  card_id = IntegerField('card_id', validators=[DataRequired(message='Card is required')])
