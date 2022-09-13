@@ -9,9 +9,18 @@
     <p class="card-text mb-2"><span class="fw-bold">Due Date: </span>{{ card['deadline'].strftime('%Y-%m-%d') }}</p>
     <p class="card-text mb-2"><span class="fw-bold">Status: </span>
       {% if card['complete'] %}
-      <span class="text-success fw-bold">Completed</span> <span class="text-success fw-semibold">({{ card['completed_on'].strftime('%Y-%m-%d') }})</span>
+      <span class="text-success fw-bold">Completed</span> <span class="text-success fw-semibold">({{ card['completed_on'].strftime('%y/%m/%d') }})</span>
       {% else %}
       <span class="text-danger fw-bold">Pending</span>
+      {% endif %}
+    </p>
+    <p class="card-text mb-2"><span class="fw-bold">Dealine: </span>
+      {% if card['deadline_passed'] %}
+      <span class="text-danger fw-bold">Missed</span>
+      {% elif card['complete'] %}
+      <span class="text-success fw-bold">Met</span>
+      {% else %}
+      <span class="text-warning fw-bold">Pending</span>
       {% endif %}
     </p>
   </div>
@@ -20,7 +29,8 @@
       <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
         aria-expanded="false"><span class="fw-bold">Actions</span></a>
       <div class="dropdown-menu w-100 py-1">
-        <a class="dropdown-item" href="#">Edit</a>
+        <a class="dropdown-item" href="{{ url_for('render_edit_card', card_id=card['card_id']) }}">Edit</a>
+        {% if lists|length > 1 %}
         <a class="dropdown-item" href="#">
           <form action="{{ url_for('move_card') }}" method="POST" id="create-card-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -38,8 +48,9 @@
             <input type="submit" value="Create Card" hidden>
           </form>
         </a>
+        {% endif %}
         <div class="dropdown-divider mt-0"></div>
-        <a class="dropdown-item bg-danger fw-bold text-white hover-danger" href="#">Delete</a>
+        <a class="dropdown-item bg-danger fw-bold text-white hover-danger" href="{{ url_for('render_edit_card', card_id=card['card_id']) }}">Delete</a>
       </div>
     </div>
   </div>

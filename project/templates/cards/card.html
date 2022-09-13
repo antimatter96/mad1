@@ -32,7 +32,15 @@
       <p class="card-text mb-2"><span class="fw-bold">Completed On: </span>
         <span class="text-success fw-bold">{{ card['completed_on'].strftime('%Y-%m-%d') }}</span>
       </p>
+      <p class="card-text mb-2"><span class="fw-bold">Deadline: </span>
+          {% if card['deadline_passed'] %}
+          <span class="text-danger fw-bold">Missed</span>
+          {% else %}
+          <span class="text-success fw-bold">Met</span>
+          {% endif %}
+      </p>
       {% endif %}
+      
     </div>
   </div>
 </div>

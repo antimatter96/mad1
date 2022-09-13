@@ -1,4 +1,6 @@
+from datetime import datetime
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from application.database.index import db
 
@@ -16,3 +18,9 @@ class Card(db.Model):
 
   creator_id = db.Column(db.Integer, db.ForeignKey("user.user_id"))
   creator = relationship("User", back_populates="cards")
+
+  @hybrid_property
+  def deadline_passed(self):
+    if self.complete:
+      return self.completed_on > self.deadline
+    return self.deadline > datetime.now()
