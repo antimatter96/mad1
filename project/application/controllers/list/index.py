@@ -10,7 +10,7 @@ from application.controllers.utils import get_redirect_error, create_redirect_er
 from application.controllers.decorators import ensure_logged_in, ensure_list_exists
 from application.errors import FieldsNotValidError
 
-from application.controllers.list.form import DeleteForm, ListForm
+from application.controllers.list.form import DeleteListForm, ListForm
 
 # Board
 @app.route("/", methods=['GET'])
@@ -123,7 +123,7 @@ def edit_list(list_obj):
 @ensure_logged_in
 @ensure_list_exists
 def delete_list(list_obj):
-  form = DeleteForm()
+  form = DeleteListForm()
   form.validate()
   errors = flatten_from_errors(form.errors)
 

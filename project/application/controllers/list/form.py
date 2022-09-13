@@ -16,7 +16,7 @@ class ListForm(FlaskForm):
       ]
   )
 
-class DeleteForm(FlaskForm):
+class DeleteListForm(FlaskForm):
 
   def validate_new_list_id(form, field):
     if (len(form.form_errors) == 0 and form.mode.data == 'move'):

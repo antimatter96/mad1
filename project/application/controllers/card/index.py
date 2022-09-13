@@ -9,7 +9,7 @@ from application.errors import FieldsNotValidError, ResourceNotFound
 from application.models.user import User
 from application.controllers.utils import get_redirect_error, create_redirect_error, flatten_from_errors
 from application.controllers.decorators import ensure_card_exists, ensure_logged_in
-from application.controllers.card.form import CardForm, MoveCard
+from application.controllers.card.form import CardForm, MoveCardForm
 
 @app.route("/cards/new", methods=['GET'])
 @ensure_logged_in
@@ -47,6 +47,8 @@ def create_card():
     if current_list != None:
       try:
         new_card = Card(title=title, content=content, deadline=deadline, complete=complete, creator=current_user, list=current_list)
+        if complete:
+          new_card.completed_on = datetime.now().strftime("%Y-%m-%d")
         db.session.add(new_card)
         db.session.commit()
       except Exception as e:
@@ -66,17 +68,19 @@ def create_card():
     app.logger.info('Some errors were present : %s', ','.join(errors))
     return render_template('cards/new_card.html', errors=errors, lists=lists, list_id=list_id, disable_list=disable_list)
 
-  return redirect(url_for('list_card', card_id=new_card.card_id))
+  return redirect(url_for('render_card', card_id=new_card.card_id))
 
 @app.route("/card/<card_id>", methods=['DELETE'])
 @ensure_logged_in
-def delete_card(card_id):
+@ensure_card_exists
+def delete_card(card):
   return '_list_students'
 
 @app.route("/card/<card_id>", methods=['GET'])
 @ensure_logged_in
-def list_card(card_id):
-  return '_list_students'
+@ensure_card_exists
+def render_card(card):
+  return render_template('cards/card.html', errors=[], card=card)
 
 @app.route("/card/<card_id>/edit", methods=['GET'])
 @ensure_logged_in
@@ -88,10 +92,8 @@ def render_edit_card(card):
     errors.append(redirect_error)
 
   lists = db.session.query(List).with_entities(List.list_id, List.name).all()
-  list_id = int(request.args.get('list_id', -1))
-  disable_list = list_id in [l['list_id'] for l in lists]
 
-  return render_template('cards/edit_card.html', errors=errors, lists=lists, list_id=list_id, disable_list=disable_list)
+  return render_template('cards/edit_card.html', errors=errors, lists=lists, card=card)
 
 @app.route("/card/<card_id>/edit", methods=['POST'])
 @ensure_logged_in
@@ -101,22 +103,24 @@ def edit_card(card):
   form.validate()
   errors = flatten_from_errors(form.form_errors)
 
+  update_completed_time = False
   if len(errors) == 0:
-    title = form.title.data
-    content = form.content.data
-    deadline = form.deadline.data
-    complete = form.complete.data
+    if card.complete == False and form.complete.data == True:
+      update_completed_time = True
+
     list_id = form.list_id.data
 
     app.logger.info('Searcing for user')
     current_list = db.session.query(List).filter(List.list_id == list_id).first()
     if current_list != None:
       try:
-        card.title = title
-        card.content = content
-        card.deadline = deadline
-        card.complete = complete
+        card.title = form.title.data
+        card.content = form.content.data
+        card.deadline = form.deadline.data
+        card.complete = form.complete.data
         card.list = current_list
+        if update_completed_time:
+          card.completed_on = datetime.now().strftime("%Y-%m-%d")
         db.session.commit()
       except Exception as e:
         app.log_exception(e)
@@ -134,12 +138,12 @@ def edit_card(card):
     encoded_redirect_error = create_redirect_error("\n".join(errors))
     return redirect(url_for('render_card_list', card_id=card.card_id, redirect_error=encoded_redirect_error))
 
-  return redirect(url_for('list_card', card_id=card.card_id))
+  return redirect(url_for('render_card', card_id=card.card_id))
 
 @app.route("/move_card", methods=['POST'])
 @ensure_logged_in
 def move_card():
-  form = MoveCard()
+  form = MoveCardForm()
   form.validate()
   errors = flatten_from_errors(form.form_errors)
 
