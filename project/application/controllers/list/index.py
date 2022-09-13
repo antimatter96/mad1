@@ -6,9 +6,11 @@ from application.models.user import User
 
 from application.database.index import db
 
-from application.controllers.utils import get_redirect_error, create_redirect_error
+from application.controllers.utils import get_redirect_error, create_redirect_error, flatten_from_errors
 from application.controllers.decorators import ensure_logged_in, ensure_list_exists
 from application.errors import FieldsNotValidError
+
+from application.controllers.list.form import DeleteForm, ListForm
 
 # Board
 @app.route("/", methods=['GET'])
@@ -29,18 +31,14 @@ def index():
 def create_list():
   app.logger.info('Request Received')
 
-  name = request.form.get('name', "").strip()
-  description = request.form.get('description', "").strip()
-
-  errors = []
-
-  if len(name) == 0:
-    errors.append(FieldsNotValidError("Name is required"))
-  if len(description) == 0:
-    errors.append(FieldsNotValidError("Description is required"))
+  form = ListForm()
+  form.validate()
+  errors = flatten_from_errors(form.errors)
 
   if len(errors) == 0:
-    db.session.begin()
+    name = form.name.data
+    description = form.description.data
+
     total_lists = db.session.query(List).all()
     if len(total_lists) < 5:
       try:
@@ -94,16 +92,13 @@ def render_edit_list(list_obj):
 @ensure_logged_in
 @ensure_list_exists
 def edit_list(list_obj):
-  name = request.form.get('name', "").strip()
-  description = request.form.get('description', "").strip()
-
-  errors = []
-  if len(name) == 0:
-    errors.append(FieldsNotValidError("Name is required"))
-  if len(description) == 0:
-    errors.append(FieldsNotValidError("Description is required"))
+  form = ListForm()
+  form.validate()
+  errors = flatten_from_errors(form.errors)
 
   if len(errors) == 0:
+    name = form.name.data
+    description = form.description.data
     try:
       list_obj.name = name
       list_obj.description = description
@@ -128,32 +123,19 @@ def edit_list(list_obj):
 @ensure_logged_in
 @ensure_list_exists
 def delete_list(list_obj):
-  mode = request.form.get('mode', "").strip()
-  new_list_id = request.form.get('list_id', "").strip()
+  form = DeleteForm()
+  form.validate()
+  errors = flatten_from_errors(form.errors)
 
-  errors = []
+  mode = form.mode.data
+  new_list_id = form.list_id.data
 
-  if len(mode) == 0:
-    errors.append(FieldsNotValidError("Mode is requried"))
-  if mode != "move" and mode != "delete":
-    errors.append(FieldsNotValidError("Mode should be move / delete"))
+  if len(errors) == 0 and mode == "move":
+    new_list_obj = db.session.query(List).filter(List.list_id == new_list_id).first()
 
-  if mode == "move":
-    if len(new_list_id) == 0:
-      errors.append(FieldsNotValidError("List is requried"))
-
-    if len(new_list_id) > 0:
-      try:
-        new_list_id = int(new_list_id)
-      except:
-        errors.append(FieldsNotValidError("List is requried"))
-
-    if len(errors) == 0:
-      new_list_obj = db.session.query(List).filter(List.list_id == new_list_id).first()
-
-      if new_list_obj == None:
-        encoded_redirect_error = create_redirect_error("List with id " + str(new_list_id) + " does not exist")
-        return redirect(url_for('render_create_list', redirect_error=encoded_redirect_error))
+    if new_list_obj == None:
+      encoded_redirect_error = create_redirect_error("List with id " + str(new_list_id) + " does not exist")
+      return redirect(url_for('render_create_list', redirect_error=encoded_redirect_error))
 
   if len(errors) == 0:
     if mode == "delete":

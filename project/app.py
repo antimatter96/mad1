@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template
 from flask_migrate import Migrate
+from flask_wtf.csrf import CSRFProtect
 
 from application.database.index import db
 from config import LocalDevelopmentConfig, TestingConfig
@@ -14,6 +15,7 @@ app = None
 def create_app():
   env = os.getenv('ENV', "development")
   app = Flask(__name__, template_folder="templates")
+  csrf = CSRFProtect()
 
   if env == 'production':
     ...
@@ -29,6 +31,7 @@ def create_app():
   db.init_app(app)
   migrate = Migrate(app, db)
   app.logger.info("migrate")
+  csrf.init_app(app)
   app.app_context().push()
   app.logger.info("App setup complete")
   return app

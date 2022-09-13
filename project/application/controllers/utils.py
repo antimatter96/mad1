@@ -33,3 +33,10 @@ def get_redirect_error():
       return None
 
   return None
+
+def flatten_from_errors(form_errors):
+  errors = []
+  for k in form_errors:
+    errors.extend(form_errors[k])
+  
+  return errors

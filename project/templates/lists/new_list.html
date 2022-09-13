@@ -10,6 +10,7 @@ Create list
 <div class="col-md-4 py-4"></div>
 <div class="col-md-4 py-2">
   <form action="" method="POST" id="create-list-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="form-floating mb-2">
       <input type="name" name="name" class="form-control" id="name" placeholder="Some name" required>
       <label for="name" class="fw-bold">Name</label>
