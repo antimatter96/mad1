@@ -48,7 +48,7 @@ def create_card():
       try:
         new_card = Card(title=title, content=content, deadline=deadline, complete=complete, creator=current_user, list=current_list)
         if complete:
-          new_card.completed_on = datetime.now().strftime("%Y-%m-%d")
+          new_card.completed_on = datetime.now()
         db.session.add(new_card)
         db.session.commit()
       except Exception as e:
@@ -70,11 +70,29 @@ def create_card():
 
   return redirect(url_for('render_card', card_id=new_card.card_id))
 
-@app.route("/card/<card_id>", methods=['DELETE'])
+@app.route("/card/<card_id>/delete", methods=['POST'])
 @ensure_logged_in
 @ensure_card_exists
 def delete_card(card):
-  return '_list_students'
+  errors = []
+  try:
+    db.session.delete(card)
+    db.session.commit()
+  except Exception as e:
+    app.log_exception(e)
+    app.logger.error(e)
+    db.session.rollback()
+    errors.append(e)
+  else:
+    app.logger.info('list deleted')
+
+  if len(errors) > 0:
+    errors = [str(error) for error in errors]
+    app.logger.info('Some errors were present : %s', ','.join(errors))
+    encoded_redirect_error = create_redirect_error("\n".join(errors))
+    return redirect(url_for('render_edit_card', card_id=card.card_id, redirect_error=encoded_redirect_error))
+
+  return redirect(url_for('index'))
 
 @app.route("/card/<card_id>", methods=['GET'])
 @ensure_logged_in
@@ -120,7 +138,7 @@ def edit_card(card):
         card.complete = form.complete.data
         card.list = current_list
         if update_completed_time:
-          card.completed_on = datetime.now().strftime("%Y-%m-%d")
+          card.completed_on = datetime.now()
         db.session.commit()
       except Exception as e:
         app.log_exception(e)
@@ -136,7 +154,7 @@ def edit_card(card):
     errors = [str(error) for error in errors]
     app.logger.info('Some errors were present : %s', ','.join(errors))
     encoded_redirect_error = create_redirect_error("\n".join(errors))
-    return redirect(url_for('render_card_list', card_id=card.card_id, redirect_error=encoded_redirect_error))
+    return redirect(url_for('render_edit_card', card_id=card.card_id, redirect_error=encoded_redirect_error))
 
   return redirect(url_for('render_card', card_id=card.card_id))
 

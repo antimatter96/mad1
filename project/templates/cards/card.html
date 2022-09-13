@@ -14,7 +14,6 @@
 <div class="col-md-4 py-2"></div>
 <div class="col-md-4 py-2"></div>
 <div class="col-md-4 py-2">
-
   <div class="card mb-1 px-0">
     <div class="card-header px-2 py-2 mb-0">
       <h5 class="card-title mb-0">{{ card['title'] }}</h5>
@@ -29,6 +28,11 @@
         <span class="text-danger fw-bold">Pending</span>
         {% endif %}
       </p>
+      {% if card['complete'] %}
+      <p class="card-text mb-2"><span class="fw-bold">Completed On: </span>
+        <span class="text-success fw-bold">{{ card['completed_on'].strftime('%Y-%m-%d') }}</span>
+      </p>
+      {% endif %}
     </div>
   </div>
 </div>

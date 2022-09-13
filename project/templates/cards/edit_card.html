@@ -12,7 +12,7 @@ Edit Card
   <form action="" method="POST" id="edit-card-form">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="form-floating mb-2">
-      <select class="form-select" id="list_id" name="list_id" required placeholder="Select List">
+      <select class="form-select" id="list_id" name="list_id" required>
         <option value="" disabled>Select List</option>
         {% for list in lists %}
         <option value="{{ list['list_id'] }}" {% if list['list_id'] == card['list_id'] %}selected{% endif %}>{{ list['name'] }}</option>
@@ -21,35 +21,44 @@ Edit Card
       <label for="list_id" class="fw-bold fs-6" style="color: #495057;">List</label>
     </div>
     <div class="form-floating mb-2">
-      <input type="title" name="title" class="form-control" id="title" placeholder="Some title" required  value="{{ card['title'] }}">
+      <input type="title" name="title" class="form-control" id="title" required  value="{{ card['title'] }}">
       <label for="title" class="fw-bold">Title</label>
     </div>
     <div class="form-floating mb-2">
-      <textarea name="content" class="form-control" id="content" placeholder="content" required
-        style="height: 10rem;">{{ card['content'] }}</textarea>
+      <textarea name="content" class="form-control" id="content" required style="height: 10rem;">{{ card['content'] }}</textarea>
       <label for="title" class="fw-bold">Summary</label>
     </div>
     <div class="form-floating mb-2">
-      <input type="date" name="deadline" class="form-control" id="deadline" placeholder="Some Deadline" required value="{{ card['deadline'].strftime("%Y-%m-%d") }}">
+      <input type="date" name="deadline" class="form-control" id="deadline" required value="{{ card['deadline'].strftime("%Y-%m-%d") }}">
       <label for="deadline" class="fw-bold">Deadline</label>
     </div>
+    {% if not card['complete'] %}
     <div class="py-3 my-2 text-center custom-checkbox">
       <label for="complete" class="fw-bold">Complete</label>
-      <input type="checkbox" name="complete" class="form-check-input" id="complete" placeholder="Some complete" {% if card['complete'] %} checked {% endif %}>
+      <input type="checkbox" name="complete" class="form-check-input" id="complete">
     </div>
+    {% endif %}
     <div>
       <input type="submit" value="Save" class="btn btn-primary btn-lg w-100">
     </div>
   </form>
 </div>
 <div class="col-md-4 py-2"></div>
+<div class="col-md-4 py-4"></div>
+<div class="col-md-4 py-2">
+  <form action="{{ url_for('delete_card', card_id=card['card_id']) }}" method="POST" id="delete-card-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <input type="submit" value="Delete" class="btn btn-danger btn-lg w-100">
+  </form>
+</div>
+<div class="col-md-4 py-2"></div>
 
 <script>
-  let form = document.getElementById("create-card-form");
-  form.addEventListener('submit', () => {
-    let listSelect = document.getElementById('list_id');
-    listSelect.disabled = "";
-    listSelect.enabled = true;
+  let form = document.getElementById("delete-card-form");
+  form.addEventListener('submit', (e) => {
+    if (!confirm("Do you really want to delete card " + "{{ card['title'] }} ?")) {
+      e.preventDefault();
+    }
   })
 </script>
 {% endblock main %}

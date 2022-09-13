@@ -9,7 +9,7 @@
     <p class="card-text mb-2"><span class="fw-bold">Due Date: </span>{{ card['deadline'].strftime('%Y-%m-%d') }}</p>
     <p class="card-text mb-2"><span class="fw-bold">Status: </span>
       {% if card['complete'] %}
-      <span class="text-success fw-bold">Completed</span>
+      <span class="text-success fw-bold">Completed</span> <span class="text-success fw-semibold">({{ card['completed_on'].strftime('%Y-%m-%d') }})</span>
       {% else %}
       <span class="text-danger fw-bold">Pending</span>
       {% endif %}
@@ -27,7 +27,7 @@
             <div class="row">
               <label for="list_id" class="col-4 col-form-label py-0 fw-normal">Move to</label>
               <div class="col-8">
-                <select class="form-select py-0" id="list_id" name="list_id" required placeholder="Select List" onchange="changeList(event)">
+                <select class="form-select py-0" id="list_id" name="list_id" required onchange="changeList(event)">
                   {% for list in lists %}
                   <option value="{{ list['list_id']}}" {% if list['list_id']==card.list['list_id'] %} selected {% endif %}>{{ list['name'] }}</option>
                   {% endfor %}

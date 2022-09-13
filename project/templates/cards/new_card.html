@@ -12,7 +12,7 @@ Create Card
   <form action="" method="POST" id="create-card-form">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="form-floating mb-2">
-      <select class="form-select" id="list_id" name="list_id" required placeholder="Select List" {% if disable_list %}disabled{% endif %}>
+      <select class="form-select" id="list_id" name="list_id" required {% if disable_list %}disabled{% endif %}>
         <option value="" disabled {% if not disable_list %}selected{% endif %}>Select List</option>
         {% for list in lists %}
         <option value="{{ list['list_id'] }}" {% if list['list_id'] == list_id %}selected{% endif %}>{{ list['name'] }}</option>
@@ -21,21 +21,16 @@ Create Card
       <label for="list_id" class="fw-bold fs-6" style="color: #495057;">List</label>
     </div>
     <div class="form-floating mb-2">
-      <input type="title" name="title" class="form-control" id="title" placeholder="Some title" required>
+      <input type="title" name="title" class="form-control" id="title" required>
       <label for="title" class="fw-bold">Title</label>
     </div>
     <div class="form-floating mb-2">
-      <textarea name="content" class="form-control" id="content" placeholder="content" required
-        style="height: 10rem;"></textarea>
+      <textarea name="content" class="form-control" id="content" required style="height: 10rem;"></textarea>
       <label for="title" class="fw-bold">Summary</label>
     </div>
     <div class="form-floating mb-2">
-      <input type="date" name="deadline" class="form-control" id="deadline" placeholder="Some Deadline" required>
+      <input type="date" name="deadline" class="form-control" id="deadline" required>
       <label for="deadline" class="fw-bold">Deadline</label>
-    </div>
-    <div class="py-3 my-2 text-center custom-checkbox">
-      <label for="complete" class="fw-bold">Mark as Complete</label>
-      <input type="checkbox" name="complete" class="form-check-input" id="complete" placeholder="Some complete">
     </div>
     <div>
       <input type="submit" value="Create Card" class="btn btn-primary btn-lg w-100">
