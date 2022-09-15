@@ -13,5 +13,7 @@ class User(db.Model):
   cards = relationship("Card", back_populates="creator")
   lists = relationship("List", back_populates="creator")
 
+  auth_token = db.Column(db.String(255))
+
   def display_name(__self__):
     return __self__.username.split('@')[0]

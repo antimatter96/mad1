@@ -1,4 +1,3 @@
-import base64
 from functools import wraps
 
 from flask import current_app as app

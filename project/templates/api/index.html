@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}API{% endblock %}
+
+{% block header %}
+API
+{% endblock %}
+
+{% block main %}
+<div class="col-md-4 py-2"></div>
+<div class="col-md-4 py-2">
+  <form>
+    <div class="form-floating m-2"><br><br></div>
+    <div class="form-floating mb-2">
+      <textarea type="text" class="form-control" id="password" name="password" readonly style="height: 7rem;">
+       {{ auth_token }}
+      </textarea>
+      <label for="password" class="fw-bold">API Token</label>
+    </div>
+    <div class="form-floating m-2"><br><br></div>
+    <div class="text-center">
+      Pass this in <kbd>x-api-token</kbd> header<br>
+      <kbd>{{ auth_token }}</kbd>
+    </div>
+  </form>
+</div>
+<div class="col-md-4 py-2"></div>
+{% endblock main %}
