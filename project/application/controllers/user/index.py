@@ -1,12 +1,12 @@
 from flask import current_app as app
 from flask import render_template, request, redirect, url_for, session
-from email_validator import validate_email, EmailNotValidError
 import bcrypt
 
 from application.models.user import User
 from application.database.index import db
 from application.errors import FieldsNotValidError
-from application.controllers.utils import get_redirect_error
+from application.controllers.utils import get_redirect_error, flatten_from_errors
+from application.controllers.user.form import SigninForm, SignupForm
 
 @app.route("/signup", methods=['GET'])
 def render_signup():
@@ -20,28 +20,18 @@ def render_signup():
 @app.route("/signup", methods=['POST'])
 def signup():
   app.logger.info('Request Received')
-  name = request.form.get('name', "").strip()
-  username = request.form.get('email', "").strip()
-  password = request.form.get('password', "").strip()
 
-  errors = []
-
-  if len(name) == 0:
-    errors.append(FieldsNotValidError("Name is required"))
-  if len(username) == 0:
-    errors.append(FieldsNotValidError("User name is required"))
-  if len(password) == 0:
-    errors.append(FieldsNotValidError("Password is requried"))
-  elif len(password) < 8:
-    errors.append(FieldsNotValidError("Minimum password length is 8"))
-
-  try:
-    username = validate_email(username).email
-  except Exception as e:
-    errors.append(FieldsNotValidError("User name " + str(e)))
+  form = SignupForm()
+  form.validate()
+  errors = flatten_from_errors(form.errors)
 
   if len(errors) == 0:
     app.logger.info('Searcing for user')
+
+    username = form.username.data
+    password = form.password.data
+    name = form.name.data
+
     db.session.begin()
     existing_user = db.session.query(User).filter(User.username == username).first()
     if existing_user == None:
@@ -80,25 +70,17 @@ def render_signin():
 @app.route("/login", methods=['POST'])
 def login():
   app.logger.info('Request Received')
-  username = request.form.get('email', "").strip()
-  password = request.form.get('password', "").strip()
 
-  errors = []
-
-  if len(username) == 0:
-    errors.append(FieldsNotValidError("Username is required"))
-  if len(password) == 0:
-    errors.append(FieldsNotValidError("Password is requried"))
-  elif len(password) < 8:
-    errors.append(FieldsNotValidError("Minimum password length is 8"))
-
-  try:
-    username = validate_email(username).email
-  except Exception as e:
-    errors.append(FieldsNotValidError(str(e)))
+  form = SigninForm()
+  form.validate()
+  errors = flatten_from_errors(form.errors)
 
   if len(errors) == 0:
     app.logger.info('Searcing for user')
+
+    username = form.username.data
+    password = form.password.data
+
     user = db.session.query(User).filter(User.username == username).first()
     if user != None:
       try:

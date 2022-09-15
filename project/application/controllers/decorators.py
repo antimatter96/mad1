@@ -7,8 +7,7 @@ from application.models.user import User
 from application.models.card import Card
 from application.models.list import List
 from application.database.index import db
-from application.errors import RedirectError
-from application.controllers.utils import create_redirect_error, is_logged_in
+from application.controllers.utils import create_redirect_error
 
 def ensure_card_exists(f):
 
@@ -65,6 +64,12 @@ def ensure_list_exists(f):
     return f(*args, **kwds, list_obj=list_obj)
 
   return wrapper
+
+def is_logged_in():
+  if session is None or 'username' not in session or 'user_id' not in session or \
+    session['username'] is None or session['user_id'] is None:
+    return False
+  return True
 
 def ensure_logged_in(f):
 

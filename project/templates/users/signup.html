@@ -10,13 +10,14 @@ Sign Up
 <div class="col-md-4 py-2"></div>
 <div class="col-md-4 py-2">
   <form action="" method="POST" id="create-user-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="form-floating mb-2">
       <input type="text" name="name" class="form-control" id="name" required>
       <label for="name" class="fw-bold">Name</label>
     </div>
     <div class="form-floating mb-2">
-      <input type="email" name="email" class="form-control" id="email" required>
-      <label for="email" class="fw-bold">Email</label>
+      <input type="email" name="username" class="form-control" id="username" required>
+      <label for="username" class="fw-bold">Email</label>
     </div>
     <div class="form-floating mb-2">
       <input type="password" name="password" class="form-control" id="password" required

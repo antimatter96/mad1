@@ -5,12 +5,6 @@ from flask import current_app as app
 from flask import session, request
 from application.errors import RedirectError
 
-def is_logged_in():
-  if session is None or 'username' not in session or 'user_id' not in session or \
-    session['username'] is None or session['user_id'] is None:
-    return False
-  return True
-
 def log_session(f):
 
   @wraps(f)
@@ -38,5 +32,5 @@ def flatten_from_errors(form_errors):
   errors = []
   for k in form_errors:
     errors.extend(form_errors[k])
-  
+
   return errors
