@@ -87,3 +87,7 @@ def ensure_logged_in(f):
     return f(*args, **kwds)
 
   return wrapper
+
+@app.context_processor
+def utility_processor():
+  return dict(jinja_is_logged_in=is_logged_in)

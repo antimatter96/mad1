@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField
+from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length, Email
 
 class SigninForm(FlaskForm):
-  password = SelectField(
+  password = PasswordField(
       'password',
       validators=[
           DataRequired(message='password is required'),
