@@ -1,8 +1,9 @@
 import time
 import bcrypt
 import hashlib
+
 from flask import current_app as app
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template, redirect, url_for, session
 
 from application.models.user import User
 from application.database.index import db
@@ -89,7 +90,6 @@ def login():
     if user != None:
       try:
         if bcrypt.checkpw(password.encode('utf8'), user.password):
-          print("USER LOGGED IN")
           app.logger.info('logging in')
           session['username'] = username
           session['user_id'] = user.user_id
@@ -137,7 +137,7 @@ def reset_token():
   if len(errors) > 0:
     errors = [str(error) for error in errors]
     app.logger.info('Some errors were present : %s', ','.join(errors))
-  
+
   return render_template('api/index.html', errors=errors, auth_token=auth_token)
 
 def get_api_token(username):

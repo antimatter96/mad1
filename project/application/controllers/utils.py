@@ -1,18 +1,7 @@
 import base64
-from functools import wraps
 
-from flask import current_app as app
-from flask import session, request
+from flask import request
 from application.errors import RedirectError
-
-def log_session(f):
-
-  @wraps(f)
-  def wrapper(*args, **kwds):
-    print(session)
-    return f(*args, **kwds)
-
-  return wrapper
 
 def create_redirect_error(error_str):
   return base64.b64encode(bytes(error_str, "utf-8")).decode("utf-8")

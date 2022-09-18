@@ -1,9 +1,5 @@
-from datetime import datetime
 from flask_restful import current_app as app
-
-from flask_restful import Resource
-from flask_restful import fields, marshal_with
-from flask_restful import reqparse, inputs
+from flask_restful import Resource, reqparse, inputs, fields, marshal_with
 
 from application.controllers.api.utils import token_required
 from application.database.index import db

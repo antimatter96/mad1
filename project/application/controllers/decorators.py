@@ -1,7 +1,7 @@
 from functools import wraps
 
 from flask import current_app as app
-from flask import session, redirect, url_for, request
+from flask import session, redirect, url_for
 from application.models.user import User
 from application.models.card import Card
 from application.models.list import List

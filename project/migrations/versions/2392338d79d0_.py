@@ -1,4 +1,4 @@
-"""empty message
+"""Auth Token
 
 Revision ID: 2392338d79d0
 Revises: 6fb2120835e8

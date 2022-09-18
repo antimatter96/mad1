@@ -1,9 +1,7 @@
 from datetime import datetime
-from flask_restful import current_app as app
 
-from flask_restful import Resource
-from flask_restful import fields, marshal_with
-from flask_restful import reqparse, inputs
+from flask_restful import current_app as app
+from flask_restful import Resource, fields, marshal_with, reqparse, inputs
 
 from application.controllers.api.utils import token_required
 from application.database.index import db
@@ -61,6 +59,7 @@ class CardAPI(Resource):
       db.session.commit()
     except Exception as e:
       db.session.rollback()
+      app.log_exception(e)
       raise InternalServerError(error_code='common_001', error_message=common_errors['common_001'])
 
     return '', 200
@@ -115,7 +114,6 @@ class CardAPI(Resource):
     list_obj = db.session.query(List).filter(List.list_id == list_id).first()
     if list_obj == None:
       raise BusinessValidationError(status_code=400, error_code='card_001', error_message=card_errors['card_001'])
-
 
     try:
       new_card = Card(title=title, content=content, deadline=deadline, complete=complete, creator=current_user, list=list_obj)

@@ -1,16 +1,14 @@
 import os
-from flask import Flask, render_template
+import logging
+
+from flask import Flask
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 
-from application.database.index import db
 from config import LocalDevelopmentConfig, TestingConfig
 
 from application.controllers.api.index import api
-
-import logging
-
-logging.basicConfig(filename='debug.log', level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
+from application.database.index import db
 
 app = None
 
@@ -38,6 +36,8 @@ def create_app():
   api.init_app(app)
   app.app_context().push()
   app.logger.info("App setup complete")
+
+  logging.basicConfig(filename='debug.log', level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
   return app
 
 app = create_app()

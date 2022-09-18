@@ -1,4 +1,4 @@
-"""empty message
+"""Base creation
 
 Revision ID: 6fb2120835e8
 Revises: 
