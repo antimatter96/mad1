@@ -6,6 +6,8 @@ from flask_wtf.csrf import CSRFProtect
 from application.database.index import db
 from config import LocalDevelopmentConfig, TestingConfig
 
+from application.controllers.api.index import api
+
 import logging
 
 logging.basicConfig(filename='debug.log', level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
@@ -32,6 +34,8 @@ def create_app():
   migrate = Migrate(app, db)
   app.logger.info("migrate")
   csrf.init_app(app)
+  api.decorators.append(csrf.exempt)
+  api.init_app(app)
   app.app_context().push()
   app.logger.info("App setup complete")
   return app
