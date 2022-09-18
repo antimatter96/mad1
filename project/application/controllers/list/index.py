@@ -137,6 +137,10 @@ def delete_list(list_obj):
       encoded_redirect_error = create_redirect_error("List with id " + str(new_list_id) + " does not exist")
       return redirect(url_for('render_create_list', redirect_error=encoded_redirect_error))
 
+    if new_list_obj.list_id == list_obj.list_id:
+      encoded_redirect_error = create_redirect_error("List to move cards to cannot be same as list to delete")
+      return redirect(url_for('render_create_list', redirect_error=encoded_redirect_error))
+
   if len(errors) == 0:
     if mode == "delete":
       try:

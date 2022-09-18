@@ -23,4 +23,4 @@ class Card(db.Model):
   def deadline_passed(self):
     if self.complete:
       return self.completed_on > self.deadline
-    return self.deadline > datetime.now()
+    return datetime.now() > self.deadline
