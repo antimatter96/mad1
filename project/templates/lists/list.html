@@ -43,8 +43,8 @@ List - {{ list_obj['name'] }}
 
 <div class="card text-white shadow-none border-0 mt-4">
   <div class="align-self-center">
-    <a class="btn btn-primary btn-lg fs-2 fw-bolder px-4 rounded-circle"
-      href="{{ url_for('render_create_card', list_id=[list_obj['list_id']]) }}">+</a>
+    <a class="btn btn-primary btn-lg fs-5 fw-bolder px-4"
+      href="{{ url_for('render_create_card', list_id=[list_obj['list_id']]) }}">Create Card</a>
   </div>
 </div>
 {% endblock main %}
