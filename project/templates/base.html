@@ -23,6 +23,13 @@
       {% block main %}{% endblock %}
     </div>
   </div>
+
+  {% if jinja_is_logged_in() %}
+  <div class="container px-0 text-end">
+    <a href="{{ url_for('reset_token') }}" class="fw-semibold text-decoration-none">Get API Token</a>
+  </div>
+  {% endif %}
+
 </body>
 
 </html>
