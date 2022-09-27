@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -31,7 +31,7 @@ class List(db.Model):
     timeline_arr = []
 
     time_slice = (datetime.now() - from_time)
-    time_slice = time_slice.seconds/(60*10)
+    time_slice = time_slice.seconds / (60 * 100)
 
     while from_time < datetime.now():
       total = sum([card.created_at <= from_time for card in self.cards])
@@ -54,5 +54,5 @@ class List(db.Model):
           'missed': missed,
       })
 
-      from_time = from_time + timedelta(minutes=30)
+      from_time = from_time + timedelta(minutes=time_slice)
     return timeline_arr

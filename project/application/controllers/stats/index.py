@@ -1,11 +1,11 @@
 from datetime import datetime
 
 from flask import current_app as app
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template
 from application.models.list import List
 
 from application.database.index import db
-from application.controllers.utils import create_redirect_error, get_redirect_error, plot_timeline
+from application.controllers.utils import get_redirect_error, plot_timeline
 from application.controllers.decorators import ensure_logged_in
 
 # Board

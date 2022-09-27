@@ -33,7 +33,7 @@ def flatten_from_errors(form_errors):
 
   return errors
 
-def plot_timeline(timeline, size=(5,6), rotation=60):
+def plot_timeline(timeline, size=(5, 6), rotation=60):
   frame = {
       'total': [slice['total'] for slice in timeline],
       'missed': [slice['missed'] for slice in timeline],
