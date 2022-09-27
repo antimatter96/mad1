@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy.orm import relationship
 
 from application.database.index import db
@@ -15,5 +16,4 @@ class User(db.Model):
 
   auth_token = db.Column(db.String(255))
 
-  def display_name(__self__):
-    return __self__.username.split('@')[0]
+  created_at = db.Column(db.DateTime(timezone=True), default=datetime.now)

@@ -1,6 +1,7 @@
 from datetime import datetime
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.sql import func
 
 from application.database.index import db
 
@@ -18,6 +19,8 @@ class Card(db.Model):
 
   creator_id = db.Column(db.Integer, db.ForeignKey("user.user_id"))
   creator = relationship("User", back_populates="cards")
+
+  created_at = db.Column(db.DateTime(timezone=True), default=datetime.now)
 
   @hybrid_property
   def deadline_passed(self):
