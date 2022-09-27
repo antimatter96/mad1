@@ -12,3 +12,4 @@ def not_authorized(e):
 from application.controllers.user.index import *
 from application.controllers.card.index import *
 from application.controllers.list.index import *
+from application.controllers.stats.index import *

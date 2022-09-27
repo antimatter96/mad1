@@ -1,4 +1,13 @@
 import base64
+import io
+import matplotlib
+import pandas as pd
+
+matplotlib.use('AGG')
+from matplotlib import pyplot as plt
+
+plt.ioff()
+plt.tight_layout()
 
 from flask import request
 from application.errors import RedirectError
@@ -23,3 +32,25 @@ def flatten_from_errors(form_errors):
     errors.extend(form_errors[k])
 
   return errors
+
+def plot_timeline(timeline, size=(5,6), rotation=60):
+  frame = {
+      'total': [slice['total'] for slice in timeline],
+      'missed': [slice['missed'] for slice in timeline],
+      'completed': [slice['completed'] for slice in timeline],
+  }
+
+  index = [slice['time'] for slice in timeline]
+
+  df = pd.DataFrame(frame, index=index)
+
+  plot = df.plot(figsize=size)
+  fig = plot.get_figure()
+  fig.autofmt_xdate(rotation=rotation)
+
+  pic_IObytes = io.BytesIO()
+  fig.savefig(pic_IObytes, format='png')
+  pic_hash = base64.b64encode(pic_IObytes.getvalue()).decode("utf-8").replace("\n", "")
+
+  plt.close(fig=fig)
+  return pic_hash

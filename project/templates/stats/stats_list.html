@@ -1,0 +1,16 @@
+<div class="card bg-white py-0 text-black-50 border-0">
+  <div class="card-header py-2 text-center border-0">
+    <h4 class="mb-0">
+      <a href="{{ url_for('render_list', list_id=list['list_id']) }}" class="fw-semibold text-decoration-none">{{ list['name'] }}</a>
+    </h4>
+  </div>
+  <div class="card-body pb-1 px-3">
+    <p class="card-text mb-2"><span class="fw-semibold">Total Cards: </span><span class="fw-bold">{{ list.cards|length }}</span></p>
+    <p class="card-text mb-2"><span class="fw-semibold">Completed: </span><span class="fw-bold">{{ list.count_completed }}</span></p>
+    <p class="card-text mb-2"><span class="fw-semibold">Incomplete: </span><span class="fw-bold">{{ list.cards|length - list.count_completed }}</span></p>
+    <p class="card-text mb-2"><span class="fw-semibold">Daeadlined Passed: </span><span class="fw-bold">{{ list.count_missed_deadline }}</span></p>
+  </div>
+  <div class="card-footer bg-white rounded-0 p-0">
+    <img src="data:image/png;base64,{{ img_hashes[list['list_id']] }}" class="p-0 w-100">
+  </div>
+</div>

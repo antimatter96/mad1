@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Board{% endblock %}
+{% block title %}Stats{% endblock %}
 
 {% block header %}
-Board
+Stats
 {% endblock %}
 
 {% block main %}
 {% set col_width, col_offset, add_list_col_width = list_display_offsets(lists) %}
 
 {% for list in lists %}
-  <div class="{{col_width}} py-2 px-0 me-1 align-self-baseline flex-column">{% include 'board/board_list.html' %}</div>
+  <div class="{{col_width}} py-2 px-0 align-self-baseline flex-column">{% include 'stats/stats_list.html' %}</div>
 {% endfor %}
 
 {% if lists|length < 5 %}

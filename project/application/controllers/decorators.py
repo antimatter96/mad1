@@ -31,7 +31,7 @@ def ensure_card_exists(f):
     if encoded_redirect_error != "":
       return redirect(url_for('render_create_card', redirect_error=encoded_redirect_error))
 
-    print('card ->', card.card_id)
+    app.logger.debug('card -> ' + str(card.card_id))
     return f(*args, **kwds, card=card)
 
   return wrapper
@@ -59,7 +59,7 @@ def ensure_list_exists(f):
     if encoded_redirect_error != "":
       return redirect(url_for('render_create_list', redirect_error=encoded_redirect_error))
 
-    print('list ->', list_obj.list_id)
+    app.logger.debug('list -> ' + str(list_obj.list_id))
     return f(*args, **kwds, list_obj=list_obj)
 
   return wrapper
@@ -82,7 +82,7 @@ def ensure_logged_in(f):
       encoded_redirect_error = create_redirect_error("Please login to continue")
       return redirect(url_for('render_signin', redirect_error=encoded_redirect_error))
 
-    print('current_user ->', current_user.user_id)
+    app.logger.debug('current_user -> ' + str(current_user.user_id))
     return f(*args, **kwds)
 
   return wrapper
@@ -93,7 +93,6 @@ def utility_processor():
 
 def list_display_offsets(lists):
   n = len(lists)
-  print("length =>", n)
   col_width, col_offset, add_list_col_width = "", "", ""
   if n == 0:
     col_offset = "offset-md-5"

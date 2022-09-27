@@ -3,7 +3,7 @@
 {% block title %}List - {{ list_obj['name'] }}{% endblock %}
 
 {% block header %}
-List - {{ list_obj['name'] }}
+List - <span class="fw-light">{{ list_obj['name'] }}</span>
 {% endblock %}
 
 {% block main %}
@@ -34,11 +34,19 @@ List - {{ list_obj['name'] }}
 
 
 {% if list_obj.cards|length != 0 %}
+
+<div class="col-md-2 py-4"></div>
+<div class="col-md-8 row mt-0 mb-0 bg-white rounded-0 p-0">
+  <img src="data:image/png;base64,{{ img_hash }}" class="p-0 w-100">
+</div>
+<div class="col-md-2 py-4"></div>
+
+
 <div class="col-md-1 py-4"></div>
 <div class="col-md-10 row mt-5 mb-2">
 <hr>
 
-  {% set total_cards = list_obj.cards|length %}
+{% set total_cards = list_obj.cards|length %}
 {% set total_rows = (total_cards/3)|int %}
 
 {% for row_no in range(0, total_rows+1) %}
@@ -46,7 +54,7 @@ List - {{ list_obj['name'] }}
     {% for card in list_obj.cards %}
       {% if ((loop.index0)/3)|int == row_no %}
         <div class="row col-md-4">
-          {% include 'cards/board_card.html' %}
+          {% include 'cards/index.html' %}
         </div>
       {% endif %}
     {% endfor %}
@@ -56,7 +64,6 @@ List - {{ list_obj['name'] }}
 </div>
 <div class="col-md-1 py-4"></div>
 {% endif %}
-
 
 <div class="card text-white shadow-none border-0 mt-4">
   <div class="align-self-center">

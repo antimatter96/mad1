@@ -15,7 +15,8 @@ Edit Card
       <select class="form-select" id="list_id" name="list_id" required>
         <option value="" disabled>Select List</option>
         {% for list in lists %}
-        <option value="{{ list['list_id'] }}" {% if list['list_id'] == card['list_id'] %}selected{% endif %}>{{ list['name'] }}</option>
+        {{ list['list_id'] }} + {{ card['parent_id'] }}
+        <option value="{{ list['list_id'] }}" {% if list['list_id'] == card['parent_id'] %}selected{% endif %}>{{ list['name'] }}</option>
         {% endfor %}
       </select>
       <label for="list_id" class="fw-bold fs-6" style="color: #495057;">List</label>

@@ -6,7 +6,7 @@ from application.models.list import List
 from application.models.user import User
 
 from application.database.index import db
-from application.controllers.utils import get_redirect_error, create_redirect_error, flatten_from_errors
+from application.controllers.utils import get_redirect_error, create_redirect_error, flatten_from_errors, plot_timeline
 from application.controllers.decorators import ensure_logged_in, ensure_list_exists
 from application.errors import FieldsNotValidError
 from application.controllers.list.form import DeleteListForm, ListForm
@@ -20,7 +20,6 @@ def index():
   if redirect_error != None:
     errors.append(redirect_error)
 
-  current_user = db.session.query(User).filter(User.user_id == session['user_id']).first()
   lists = db.session.query(List).all()
   return render_template('board/index.html', errors=errors, lists=lists)
 
@@ -182,4 +181,5 @@ def delete_list(list_obj):
 @ensure_list_exists
 def render_list(list_obj):
   lists = db.session.query(List).all()
-  return render_template('lists/list.html', errors=[], list_obj=list_obj, lists=lists)
+  img_hash = plot_timeline(list_obj.timeline(), size=(10, 4), rotation=0)
+  return render_template('lists/list.html', errors=[], list_obj=list_obj, lists=lists, img_hash=img_hash)
