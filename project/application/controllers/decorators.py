@@ -89,4 +89,29 @@ def ensure_logged_in(f):
 
 @app.context_processor
 def utility_processor():
-  return dict(jinja_is_logged_in=is_logged_in)
+  return dict(jinja_is_logged_in=is_logged_in, list_display_offsets=list_display_offsets)
+
+def list_display_offsets(lists):
+  n = len(lists)
+  print("length =>", n)
+  col_width, col_offset, add_list_col_width = "", "", ""
+  if n == 0:
+    col_offset = "offset-md-5"
+  elif n == 1:
+    col_width = "col-md-3"
+    col_offset = "offset-md-5"
+    add_list_col_width = "col-md-2"
+  elif n == 2:
+    col_width = "col-md-3"
+    col_offset = "offset-md-3"
+    add_list_col_width = "col-md-2"
+  elif n == 3:
+    col_width = "col-md-3"
+    col_offset = ""
+    add_list_col_width = "col-md-2"
+  elif n == 4:
+    col_width = "col-md-2_half"
+    col_offset = ""
+    add_list_col_width = "col-md-2"
+
+  return col_width, col_offset, add_list_col_width

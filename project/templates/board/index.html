@@ -18,21 +18,19 @@ Board
 {% set col_width, col_offset = "col-md-3", "offset-md-3" %}
 {% endif %}
 
-{% if lists|length == 0 %}
-{% set col_offset = "offset-md-5" %}
-{% endif %}
+{% set col_width, col_offset, add_list_col_width = list_display_offsets(lists) %}
+
 {% for list in lists %}
-  <div class="{{col_width}} py-2 px-0 align-self-baseline flex-column">{% include 'board/board_list.html' %}</div>
+  <div class="{{col_width}} py-2 px-0 me-1 align-self-baseline flex-column">{% include 'board/board_list.html' %}</div>
 {% endfor %}
 
 {% if lists|length < 5 %}
-<div class="{{col_width}} py-2 px-0 text-center d-flex {{col_offset}}" id="new_list">
+<div class="{{add_list_col_width}} py-2 px-0 text-center d-flex {{col_offset}}" id="new_list">
   <div class="align-self-center">
     {% if lists|length == 0 %}
       <h4 class="fw-bold">You have no lists</h4>
     {% endif %}
-    <h4>Add a list</h4>
-    <a class="btn btn-primary btn-lg fs-1 fw-bolder px-4 rounded-circle" href="{{ url_for('render_create_list') }}">+</a>
+    <a class="btn btn-secondary btn-lg fw-bolder px-4 fs-6" href="{{ url_for('render_create_list') }}">Create A List</a>
   </div>
 </div>
 {% endif %}

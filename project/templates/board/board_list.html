@@ -5,12 +5,19 @@
     </h4>
   </div>
 </div>
+{% if list.cards|length == 0 %}
+<div class="card shadow-none border-0 my-4">
+  <div class="align-self-center">
+    <h5 class="fw-light text-danger">This list has no cards</h5>
+  </div>
+</div>
+{% endif %}
 {% for card in list.cards %}
   {% include 'cards/board_card.html' %}
 {% endfor %}
 <div class="card text-white shadow-none border-0 mt-4">
   <div class="align-self-center">
-    <a class="btn btn-primary btn-lg fs-5 fw-bolder px-4"
-      href="{{ url_for('render_create_card', list_id=[list['list_id']]) }}">Create new Card</a>
+    <a class="btn btn-primary btn-lg fs-6 fw-bolder px-4"
+      href="{{ url_for('render_create_card', list_id=[list['list_id']]) }}">Create Card</a>
   </div>
 </div>

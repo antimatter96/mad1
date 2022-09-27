@@ -136,9 +136,9 @@ def edit_card(card):
         card.title = form.title.data
         card.content = form.content.data
         card.deadline = form.deadline.data
-        card.complete = form.complete.data
         card.list = current_list
         if update_completed_time:
+          card.complete = True
           card.completed_on = datetime.now()
         db.session.commit()
       except Exception as e:

@@ -36,6 +36,7 @@ Edit list
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <fieldset class="form-group">
       <h6>How should the cards in the list be handled ?</h6>
+      <h6>You have {{ list_obj['cards']|length }} cards</h6>
       <div class="form-check">
         <input class="form-check-input" type="radio" name="mode" id="radio_delete" value="delete" checked="" onchange="handleClick(this)">
         <label class="form-check-label" for="radio_delete">Delete cards</label>

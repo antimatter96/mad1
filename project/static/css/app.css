@@ -85,3 +85,14 @@ header > h2 {
 .w-60 {
   width: 60% !important;
 }
+
+.btn, .form-check-label {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+@media (min-width: 768px) {
+  .col-md-2_half {
+    flex: 0 0 auto;
+    width: 19.66666667%;
+  }
+}
