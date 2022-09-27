@@ -6,3 +6,5 @@ flask-wtf==1.0.1
 email_validator==1.2.1
 bcrypt==3.2.2
 alembic==1.8.1
+matplotlib
+pandas
