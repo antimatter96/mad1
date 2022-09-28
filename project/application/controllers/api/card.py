@@ -8,6 +8,7 @@ from application.database.index import db
 from application.models.card import Card
 from application.models.list import List
 from application.controllers.api.errors import NotFoundError, BusinessValidationError, InternalServerError, common_errors
+from application.controllers.api.utils import min_length
 
 class SimpleDateTime(fields.Raw):
 
@@ -28,11 +29,13 @@ card_fields = {
     "title": fields.String,
     "content": fields.String,
     "complete": fields.Boolean,
+    "created_at": SimpleDateTime,
+    "updated_at": SimpleDateTime,
 }
 
 card_update_parser = reqparse.RequestParser()
-card_update_parser.add_argument('title', type=str, required=True)
-card_update_parser.add_argument('content', type=str, required=True)
+card_update_parser.add_argument('title', type=min_length(1), required=True, trim=True)
+card_update_parser.add_argument('content', type=min_length(1), required=True, trim=True)
 card_update_parser.add_argument('complete', type=inputs.boolean, default=False)
 card_update_parser.add_argument('list_id', type=int, required=True)
 card_update_parser.add_argument('deadline', type=inputs.date, required=True)

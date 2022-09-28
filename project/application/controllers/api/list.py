@@ -6,6 +6,7 @@ from application.database.index import db
 from application.models.card import Card
 from application.models.list import List
 from application.controllers.api.errors import NotFoundError, BusinessValidationError, InternalServerError, common_errors
+from application.controllers.api.utils import min_length
 
 class SimpleDateTime(fields.Raw):
 
@@ -26,8 +27,8 @@ list_fields = {
 }
 
 list_update_parser = reqparse.RequestParser()
-list_update_parser.add_argument('description', type=str, required=True)
-list_update_parser.add_argument('name', type=str, required=True)
+list_update_parser.add_argument('description', type=min_length(1), required=True)
+list_update_parser.add_argument('name', type=min_length(1), required=True)
 list_create_parser = list_update_parser.copy()
 
 list_delete_parser = reqparse.RequestParser()
