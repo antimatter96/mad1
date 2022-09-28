@@ -1,0 +1,339 @@
+openapi: 3.0.3
+info:
+  title: Kanban 1.0
+  description: KanBan API
+  version: 1.0.11
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: card
+    description: Cards
+  - name: list
+    description: Lists
+paths:
+  /card:
+    post:
+      tags:
+        - card
+      summary: Create card
+      operationId: CreateCard
+      requestBody:
+        $ref: "#/components/requestBodies/CreateCardBody"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Card"
+        "400":
+          description: Invalid Params
+        "401":
+          description: UnAuthorized
+      security:
+        - api_key: []
+  /card/{card_id}:
+    put:
+      tags:
+        - card
+      summary: Update a card
+      operationId: UpdateCard
+      parameters:
+        - name: card_id
+          in: path
+          description: ID of Card that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        $ref: "#/components/requestBodies/CreateCardBody"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Card"
+        "400":
+          description: Invalid Params
+        "401":
+          description: UnAuthorized
+        "404":
+          description: Card not found
+      security:
+        - api_key: []
+    get:
+      tags:
+        - card
+      summary: Get Card
+      operationId: GetCard
+      parameters:
+        - name: card_id
+          in: path
+          description: ID of Card that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Card"
+        "401":
+          description: UnAuthorized
+        "404":
+          description: Card not found
+      security:
+        - api_key: []
+    delete:
+      tags:
+        - card
+      summary: Delere Card
+      operationId: DeleteCard
+      parameters:
+        - name: card_id
+          in: path
+          description: ID of Card that needs to be delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful operation
+        "401":
+          description: UnAuthorized
+        "404":
+          description: Card not found
+      security:
+        - api_key: []
+  /list:
+    post:
+      tags:
+        - list
+      summary: Create List
+      description: "__Limited to 5__"
+      operationId: CreateList
+      requestBody:
+        $ref: "#/components/requestBodies/CreateListBody"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Card"
+        "400":
+          description: Invalid Params
+        "401":
+          description: UnAuthorized
+      security:
+        - api_key: []
+  /list/{list_id}:
+    put:
+      tags:
+        - list
+      summary: Update a List
+      operationId: UpdateList
+      parameters:
+        - name: list_id
+          in: path
+          description: ID of List that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        $ref: "#/components/requestBodies/UpdateListBody"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/List"
+        "400":
+          description: Invalid params
+        "401":
+          description: UnAuthorized
+        "404":
+          description: List not found
+      security:
+        - api_key: []
+    get:
+      tags:
+        - list
+      summary: Get List
+      operationId: GetList
+      parameters:
+        - name: list_id
+          in: path
+          description: ID of pet that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: The list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/List"
+        "401":
+          description: UnAuthorized
+        "404":
+          description: List not found
+      security:
+        - api_key: []
+    delete:
+      tags:
+        - list
+      summary: Delete List
+      description: "Can either move the cards or delete them"
+      operationId: DeleteList
+      parameters:
+        - name: list_id
+          in: path
+          description: ID of List that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid Params
+        "401":
+          description: UnAuthorized
+        "404":
+          description: List not found
+      security:
+        - api_key: []
+components:
+  schemas:
+    ListRequest:
+      required:
+        - description
+        - name
+      type: object
+      properties:
+        description:
+          type: string
+        name:
+          type: string
+    List:
+      allOf:
+        - $ref: "#/components/schemas/ListRequest"
+        - type: object
+          properties:
+            list_id:
+              type: integer
+              format: int64
+    CardRequest:
+      required:
+        - list_id
+        - deadline
+        - title
+        - content
+        - complete
+      type: object
+      properties:
+        list_id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        content:
+          type: string
+        complete:
+          type: boolean
+        deadline:
+          type: string
+          format: date-time
+      xml:
+        name: order
+    Card:
+      allOf:
+        - $ref: "#/components/schemas/CardRequest"
+        - type: object
+          properties:
+            card_id:
+              type: integer
+              format: int64
+            creator_id:
+              type: integer
+              format: int32
+            completed_on:
+              type: string
+              format: date-time
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+  requestBodies:
+    UpdateCardBody:
+      description: Card object that needs to be updated
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CardRequest"
+    CreateCardBody:
+      description: Card object that needs to be added
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CardRequest"
+    UpdateListBody:
+      description: List object that needs to be updated
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CardRequest"
+    CreateListBody:
+      description: List object that needs to be added
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CardRequest"
+    DeleteListBody:
+      description: "Body that must be passed to delete"
+      content:
+        application/json:
+          schema:
+            anyOf:
+              - required:
+                  - mode
+                type: object
+                properties:
+                  mode:
+                    type: string
+                    description: Delete all cards
+                    enum:
+                      - delete
+              - required:
+                  - mode
+                  - list_id
+                type: object
+                properties:
+                  mode:
+                    type: string
+                    description: Move cards to another list
+                    enum:
+                      - move
+                  list_id:
+                    type: integer
+                    format: int64
+  securitySchemes:
+    api_key:
+      description: Can be found on `/generate_token`
+      type: apiKey
+      name: x-token-id
+      in: header
