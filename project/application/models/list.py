@@ -27,7 +27,10 @@ class List(db.Model):
     return sum([card.deadline_passed for card in self.cards])
 
   def timeline(self):
-    from_time = min([card.created_at for card in self.cards])
+    if len(self.cards) == 0:
+      return []
+
+    from_time = min([card.created_at for card in self.cards] or [])
 
     timeline_arr = []
 
