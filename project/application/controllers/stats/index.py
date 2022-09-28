@@ -1,7 +1,6 @@
-from datetime import datetime
-
 from flask import current_app as app
 from flask import render_template
+
 from application.models.list import List
 
 from application.database.index import db

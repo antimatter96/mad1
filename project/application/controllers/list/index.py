@@ -6,9 +6,9 @@ from application.models.list import List
 from application.models.user import User
 
 from application.database.index import db
+from application.errors import FieldsNotValidError
 from application.controllers.utils import get_redirect_error, create_redirect_error, flatten_from_errors, plot_timeline
 from application.controllers.decorators import ensure_logged_in, ensure_list_exists
-from application.errors import FieldsNotValidError
 from application.controllers.list.form import DeleteListForm, ListForm
 
 # Board

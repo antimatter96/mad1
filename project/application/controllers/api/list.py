@@ -1,12 +1,12 @@
 from flask_restful import current_app as app
-from flask_restful import Resource, reqparse, inputs, fields, marshal_with
+from flask_restful import Resource, reqparse, fields, marshal_with
 
-from application.controllers.api.utils import token_required
-from application.database.index import db
 from application.models.card import Card
 from application.models.list import List
+
+from application.database.index import db
+from application.controllers.api.utils import token_required, min_length
 from application.controllers.api.errors import NotFoundError, BusinessValidationError, InternalServerError, common_errors
-from application.controllers.api.utils import min_length
 
 class SimpleDateTime(fields.Raw):
 

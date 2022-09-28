@@ -6,6 +6,7 @@ from flask import current_app as app
 from flask import render_template, redirect, url_for, session
 
 from application.models.user import User
+
 from application.database.index import db
 from application.errors import FieldsNotValidError
 from application.controllers.utils import get_redirect_error, flatten_from_errors

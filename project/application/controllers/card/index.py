@@ -5,9 +5,10 @@ from flask import render_template, request, redirect, url_for, session
 
 from application.models.card import Card
 from application.models.list import List
+from application.models.user import User
+
 from application.database.index import db
 from application.errors import FieldsNotValidError, ResourceNotFound
-from application.models.user import User
 from application.controllers.utils import get_redirect_error, create_redirect_error, flatten_from_errors
 from application.controllers.decorators import ensure_card_exists, ensure_logged_in
 from application.controllers.card.form import CardForm, MoveCardForm

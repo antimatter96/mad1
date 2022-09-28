@@ -1,7 +1,7 @@
+import json
+
 from werkzeug.exceptions import HTTPException
 from flask import make_response
-
-import json
 
 class NotFoundError(HTTPException):
 

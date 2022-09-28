@@ -1,9 +1,11 @@
 from functools import wraps
+
 from flask_restful import request
 
-from application.controllers.api.errors import AuthenticationError, InternalServerError, common_errors
 from application.models.user import User
+
 from application.database.index import db
+from application.controllers.api.errors import AuthenticationError, InternalServerError, common_errors
 
 auth_errors = {"auth_001": "Token not present", "auth_002": "Invalid Token", "auth_003": "API Token Invalid or Does not exist"}
 
