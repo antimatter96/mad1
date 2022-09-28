@@ -16,4 +16,5 @@ class User(db.Model):
 
   auth_token = db.Column(db.String(255))
 
-  created_at = db.Column(db.DateTime(timezone=True), default=datetime.now)
+  created_at = db.Column(db.DateTime, default=datetime.now)
+  updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)

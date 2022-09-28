@@ -15,7 +15,8 @@ class List(db.Model):
   creator_id = db.Column(db.Integer, db.ForeignKey("user.user_id"))
   creator = relationship("User", back_populates="lists")
 
-  created_at = db.Column(db.DateTime(timezone=True), default=datetime.now)
+  created_at = db.Column(db.DateTime, default=datetime.now)
+  updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
   @hybrid_property
   def count_completed(self):
