@@ -32,7 +32,7 @@ def render_create_card():
 def create_card():
   form = CardForm()
   form.validate()
-  errors = flatten_from_errors(form.form_errors)
+  errors = flatten_from_errors(form.errors)
 
   list_id = form.list_id.data
 
@@ -121,7 +121,7 @@ def render_edit_card(card):
 def edit_card(card):
   form = CardForm()
   form.validate()
-  errors = flatten_from_errors(form.form_errors)
+  errors = flatten_from_errors(form.errors)
 
   update_completed_time = False
   if len(errors) == 0:
@@ -165,7 +165,7 @@ def edit_card(card):
 def move_card():
   form = MoveCardForm()
   form.validate()
-  errors = flatten_from_errors(form.form_errors)
+  errors = flatten_from_errors(form.errors)
 
   list_id = form.list_id.data
   card_id = form.card_id.data
